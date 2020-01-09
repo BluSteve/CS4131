@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Lecture 1: ActivityToActivity</string>
+    <string name="autolinktext">20 Clementi Avenue 1 Singapore 129957 </string>
+    <string name="email">einstein@highsch.nus.edu.sg</string>
+    <string name="textviewtext">Quantity</string>
+    <string name="addbuttontext">"+"</string>
+    <string name="subbuttontext">"-"</string>
+    <string name="quantityTextViewtext">0</string>
+    <string name="priceLabeltext">Price</string>
+    <string name="priceTextViewtext">$0</string>
+    <string name="orderButtontext">Order</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="buttonText">Press me twice</string>
+</resources>

@@ -6,66 +6,67 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="15"
-8-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml
+8-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="26" />
-9-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml
+9-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:5:5-67
-11-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:5:22-64
+11-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:5:5-67
+11-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:5:22-64
 12    <uses-permission android:name="android.permission.CALL_PHONE" />
-12-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:6:5-69
-12-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:6:22-66
+12-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:6:5-69
+12-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:6:22-66
 13    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-13-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:7:5-75
-13-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:7:22-72
+13-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:7:5-75
+13-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:7:22-72
 14
 15    <application
-15-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:9:5-27:19
+15-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:9:5-27:19
 16        android:allowBackup="true"
-16-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:10:9-35
+16-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:10:9-35
 17        android:debuggable="true"
 18        android:icon="@mipmap/ic_launcher"
-18-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:11:9-43
+18-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:11:9-43
 19        android:label="@string/app_name"
-19-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:12:9-41
+19-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:12:9-41
 20        android:supportsRtl="true"
-20-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:13:9-35
-21        android:theme="@style/AppTheme" >
-21-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:14:9-40
-22        <activity android:name="com.example.nushscs4203.activitytoactivity.MainActivity" >
-22-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:15:9-21:20
-22-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:15:19-47
-23            <intent-filter>
-23-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:16:13-20:29
-24                <action android:name="android.intent.action.MAIN" />
-24-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:17:17-69
-24-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:17:25-66
-25
-26                <category android:name="android.intent.category.LAUNCHER" />
-26-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:19:17-77
-26-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:19:27-74
-27            </intent-filter>
-28        </activity>
-29        <activity android:name="com.example.nushscs4203.activitytoactivity.Main2Activity" />
-29-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:22:9-51
-29-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:22:19-48
-30        <activity android:name="com.example.nushscs4203.activitytoactivity.PhoneActivity" />
-30-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:23:9-51
-30-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:23:19-48
-31        <activity
-31-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:24:9-26:69
-32            android:name="com.example.nushscs4203.activitytoactivity.Main3Activity"
-32-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:25:13-42
-33            android:label="@string/title_activity_main3" />
-33-->C:\Users\billi\Desktop\CS4131\ActivityToActivity\app\src\main\AndroidManifest.xml:26:13-57
-34
-35        <meta-data
-35-->[com.android.support:appcompat-v7:26.0.0] C:\Users\billi\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:26:9-28:38
-36            android:name="android.support.VERSION"
-36-->[com.android.support:appcompat-v7:26.0.0] C:\Users\billi\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:27:13-51
-37            android:value="26.0.0" />
-37-->[com.android.support:appcompat-v7:26.0.0] C:\Users\billi\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:28:13-35
-38    </application>
-39
-40</manifest>
+20-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:13:9-35
+21        android:testOnly="true"
+22        android:theme="@style/AppTheme" >
+22-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:14:9-40
+23        <activity android:name="com.example.nushscs4203.activitytoactivity.MainActivity" >
+23-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:15:9-21:20
+23-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:15:19-47
+24            <intent-filter>
+24-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:16:13-20:29
+25                <action android:name="android.intent.action.MAIN" />
+25-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:17:17-69
+25-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:17:25-66
+26
+27                <category android:name="android.intent.category.LAUNCHER" />
+27-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:19:17-77
+27-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:19:27-74
+28            </intent-filter>
+29        </activity>
+30        <activity android:name="com.example.nushscs4203.activitytoactivity.Main2Activity" />
+30-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:22:9-51
+30-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:22:19-48
+31        <activity android:name="com.example.nushscs4203.activitytoactivity.PhoneActivity" />
+31-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:23:9-51
+31-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:23:19-48
+32        <activity
+32-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:24:9-26:69
+33            android:name="com.example.nushscs4203.activitytoactivity.Main3Activity"
+33-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:25:13-42
+34            android:label="@string/title_activity_main3" />
+34-->C:\Users\nhsncl\Documents\Teaching this semester\CS4203\2019 Sem 1\Chapter 1\ActivityToActivity\app\src\main\AndroidManifest.xml:26:13-57
+35
+36        <meta-data
+36-->[com.android.support:appcompat-v7:26.0.0] C:\Users\nhsncl\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:26:9-28:38
+37            android:name="android.support.VERSION"
+37-->[com.android.support:appcompat-v7:26.0.0] C:\Users\nhsncl\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:27:13-51
+38            android:value="26.0.0" />
+38-->[com.android.support:appcompat-v7:26.0.0] C:\Users\nhsncl\.gradle\caches\transforms-2\files-2.1\e6a4c4272ab27e103526904bdcebf48a\appcompat-v7-26.0.0\AndroidManifest.xml:28:13-35
+39    </application>
+40
+41</manifest>
