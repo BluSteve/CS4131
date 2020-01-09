@@ -11,4 +11,5 @@
     <string name="orderButtontext">Order</string>
     <string name="title_activity_main3">Main3Activity</string>
     <string name="buttonText">Press me twice</string>
+    <string name="nextbuttontext">Next</string>
 </resources>
