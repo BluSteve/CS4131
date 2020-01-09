@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((TextView)findViewById(R.id.priceTextView)).setText("" + NumberFormat.getCurrencyInstance().format(0));
 
         /**different event handling approaches
          * refer to Button
@@ -57,21 +58,18 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.addButton:currentOrder++;
                 break;
-            case R.id.subButton: currentOrder--;
+            case R.id.subButton:if(currentOrder>0)currentOrder--;
                 break;
         }
 
         TextView qtyTextView = (TextView)findViewById(R.id.quantityTextView);
         qtyTextView.setText("" + currentOrder);
-    }
-
-    public void submitOrder(View view){
-        TextView qtyTextView = (TextView)findViewById(R.id.quantityTextView);
-        qtyTextView.setText("" + currentOrder);
 
         TextView priceTextView = (TextView)findViewById(R.id.priceTextView);
         priceTextView.setText("" + NumberFormat.getCurrencyInstance().format(price * currentOrder));
+    }
 
+    public void submitOrder(View view){
         Toast toast = Toast.makeText(getApplicationContext(), "moving to another activity", Toast.LENGTH_LONG);
         toast.show();
 

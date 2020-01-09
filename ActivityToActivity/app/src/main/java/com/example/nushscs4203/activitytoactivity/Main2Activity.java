@@ -17,7 +17,7 @@ public class Main2Activity extends AppCompatActivity {
         Intent intent = getIntent();
         String order=intent.getStringExtra("order");
         String total=intent.getStringExtra("total");
-        ((TextView)findViewById(R.id.activity_main2_textView1)).setText("You have order " +
-                order + " coffee.Total is " + NumberFormat.getCurrencyInstance().format(Double.parseDouble(total)));
+        ((TextView)findViewById(R.id.activity_main2_textView1)).setText("You have ordered " +
+                order + " coffee. Total is " + NumberFormat.getCurrencyInstance().format(Double.parseDouble(total)));
     }
 }
