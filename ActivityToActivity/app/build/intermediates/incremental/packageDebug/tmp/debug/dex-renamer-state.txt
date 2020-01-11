@@ -1,4 +1,7 @@
-#Fri Jan 10 12:18:33 SGT 2020
+#Sat Jan 11 13:48:10 SGT 2020
 base.0=C\:\\Users\\Steve Cao\\Desktop\\CS4131\\ActivityToActivity\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+path.1=classes.dex
+renamed.1=classes2.dex
 path.0=classes.dex
 renamed.0=classes.dex
+base.1=C\:\\Users\\billi\\Desktop\\CS4131\\ActivityToActivity\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
