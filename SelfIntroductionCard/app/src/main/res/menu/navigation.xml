@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Info"
+        android:id="@+id/navigation_basicinfo"
+        android:icon="@drawable/baseline_account_circle_black_18dp" />
+    <item
+        android:title="Life"
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/baseline_history_black_18dp" />
+    <item
+        android:title="Hobbies"
+        android:id="@+id/navigation_hobbies"
+        android:icon="@drawable/baseline_sentiment_satisfied_alt_black_18dp"/>
+    <item
+        android:title="Call me"
+        android:id="@+id/navigation_phone"
+        android:icon="@drawable/baseline_phone_black_18dp"/>
+
+</menu>
