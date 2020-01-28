@@ -134,6 +134,7 @@
             android:ems="10"
             android:hint="@string/taxHint"
             android:inputType="number"
+            android:text="@string/_7"
             android:textColor="@color/colorSecondary"
             android:textSize="16sp" />
 
