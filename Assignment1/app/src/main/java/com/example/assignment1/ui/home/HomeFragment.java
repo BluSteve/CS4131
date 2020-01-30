@@ -1,9 +1,12 @@
 package com.example.assignment1.ui.home;
 
 import android.os.Bundle;
+import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,24 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.assignment1.CardInitializer;
 import com.example.assignment1.R;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-
+    LinearLayout sv;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        View root = inflater.inflate(R.layout.fragment_events, container, false);
+        sv = root.findViewById(R.id.cardParent);
+        sv.addView((new CardInitializer()).generateCard(getResources().getDrawable(R.drawable.av), "AV IS FUN"));
         return root;
     }
 }
