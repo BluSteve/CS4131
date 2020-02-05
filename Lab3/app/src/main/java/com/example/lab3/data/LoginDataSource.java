@@ -29,17 +29,19 @@ public class LoginDataSource {
             // TODO: handle loggedInUser authentication
             Log.d("login", "asdf3");
             File file = new File(MyApplication.getAppContext().getExternalFilesDir(null),"login.txt");
+            file.createNewFile();
             Log.d("login", "die " + file.isFile());
 
 
             PrintWriter out = new PrintWriter(file);
-
-//            if(!s.hasNextLine()) {
-//                out.write("Steve,qwerty\nBill,qweddd\n");
-//                out.flush();
-//            }
             InputStream in = new FileInputStream(file);
             Scanner s = new Scanner(in);
+            if(!s.hasNextLine()) {
+                out.write("Steve,qwerty\nBill,qweddd\n");
+                out.flush();
+            }
+            in = new FileInputStream(file);
+            s = new Scanner(in);
             ArrayList<User> users = new ArrayList<User>();
             do {
                 String[] nextline = s.nextLine().split(",");
@@ -67,6 +69,7 @@ public class LoginDataSource {
 //            }
             out.append(new User(username, password).toString());
             out.close();
+            return new Result.Success<>(new LoggedInUser(username,username));
 //            Scanner s = new Scanner();
 
 //                    LoggedInUser fakeUser =
@@ -79,7 +82,6 @@ public class LoginDataSource {
             e.printStackTrace();
             return new Result.Error(new IOException("Error logging in", e));
         }
-        return null;
     }
 
     public void logout() {
