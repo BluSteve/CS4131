@@ -30,6 +30,7 @@ import com.example.lab3.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    EditText usernameEditText;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
+        usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
@@ -122,10 +123,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + " " + model.getDisplayName();
+        String welcome = getString(R.string.welcome) + " " + model.getDisplayName() + "!";
         // TODO : initiate successful logged in experience
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("message", "logged in");
+        intent.putExtra("username", usernameEditText.getText().toString().toLowerCase());
         startActivity(intent);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
