@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Lab 4.2</string>
+    <string name="emailText">Email</string>
+    <string name="passwordText">Password</string>
+    <string name="loginBtnText">LOGIN</string>
+    <string name="adminBtnText">LOGIN AS ADMIN</string>
+    <string name="guestBtnText">VOTE AS GUEST</string>
+    <string name="action_analytics">Analytics</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="votingPrompt">Which candidate would you like to vote for?</string>
+    <string name="voteBtnText">VOTE</string>
+    <string name="addCandidate">Add candidate:</string>
+    <string name="candNameHint">Name</string>
+    <string name="candDescHint">Description</string>
+    <string name="candBtn">ADD CANDIDATE</string>
+    <string name="aboutText">This project was made by Cao Yueran under the guidance of Mr. Ng Chee Loong.</string>
+    <string name="backBtn">GO BACK</string>
+</resources>
