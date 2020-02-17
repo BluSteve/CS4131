@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Lab5</string>
+    <string name="addPhotoBtn">ADD PHOTO OF FAULT</string>
+    <string name="submitBtn">SUBMIT</string>
+    <string name="resetBtn">RESET</string>
+    <string-array name="bathroom_faults">
+        <item>Urinal</item>
+        <item>Cubicle door</item>
+        <item>Main door</item>
+    </string-array>
+    <string-array name="classroom_faults">
+        <item>Projector</item>
+        <item>Table</item>
+        <item>Chair</item>
+    </string-array>
+    <string-array name="sh_faults">
+        <item>Railing</item>
+        <item>Chipped paint</item>
+    </string-array>
+    <string-array name="levels">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+    <string-array name="blocks">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+    </string-array>
+</resources>
