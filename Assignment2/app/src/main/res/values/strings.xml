@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Assignment2</string>
+    <string name="title_news">News</string>
+    <string name="title_temperature">Temperature</string>
+    <string name="title_travel">Travel</string>
+    <string name="title_clusters">Clusters</string>
+    <string name="title_settings">Settings</string>
+</resources>

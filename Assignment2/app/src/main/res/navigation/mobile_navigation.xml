@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_news">
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.stevecao.assignment2.ui.home.HomeFragment"
+        android:label="@string/title_news"
+        tools:layout="@layout/fragment_news" />
+
+    <fragment
+        android:id="@+id/navigation_temperature"
+        android:name="com.stevecao.assignment2.ui.dashboard.DashboardFragment"
+        android:label="@string/title_temperature"
+        tools:layout="@layout/fragment_temperature" />
+
+    <fragment
+        android:id="@+id/navigation_travel"
+        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:label="@string/title_travel"
+        tools:layout="@layout/fragment_travel" />
+
+    <fragment
+        android:id="@+id/navigation_clusters"
+        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:label="@string/title_clusters"
+        tools:layout="@layout/fragment_clusters" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
