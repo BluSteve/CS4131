@@ -7,31 +7,31 @@
 
     <fragment
         android:id="@+id/navigation_news"
-        android:name="com.stevecao.assignment2.ui.home.HomeFragment"
+        android:name="com.stevecao.assignment2.NewsFragment"
         android:label="@string/title_news"
         tools:layout="@layout/fragment_news" />
 
     <fragment
         android:id="@+id/navigation_temperature"
-        android:name="com.stevecao.assignment2.ui.dashboard.DashboardFragment"
+        android:name="com.stevecao.assignment2.TemperatureFragment"
         android:label="@string/title_temperature"
         tools:layout="@layout/fragment_temperature" />
 
     <fragment
         android:id="@+id/navigation_travel"
-        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:name="com.stevecao.assignment2.TravelFragment"
         android:label="@string/title_travel"
         tools:layout="@layout/fragment_travel" />
 
     <fragment
         android:id="@+id/navigation_clusters"
-        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:name="com.stevecao.assignment2.ClustersFragment"
         android:label="@string/title_clusters"
         tools:layout="@layout/fragment_clusters" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.stevecao.assignment2.ui.notifications.NotificationsFragment"
+        android:name="com.stevecao.assignment2.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

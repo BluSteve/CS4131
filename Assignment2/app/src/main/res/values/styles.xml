@@ -7,5 +7,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="fontFamily">@font/montserrat</item>
     </style>
-
+    <style name="BottomNavigationViewTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
