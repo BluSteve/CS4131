@@ -1,6 +1,7 @@
 package com.stevecao.assignment2;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.stevecao.assignment2.model.NewsHandler;
 
 public class NewsFragment extends Fragment {
     ViewPager newsViewPager;
@@ -27,6 +29,8 @@ public class NewsFragment extends Fragment {
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        NewsHandler newsHandler = new NewsHandler("https://newsapi.org/v2/top-headlines?q=coronavirus&language=en&country=sg&apiKey=98d25766996b4d85a81df8c048cffe35");
+        Log.d("news", newsHandler.toString());
         newsViewPager = getView().findViewById(R.id.newsViewPager);
         newsTabLayout = getView().findViewById(R.id.newsTabLayout);
         localNewsTab = getView().findViewById(R.id.localNewsTab);

@@ -7,9 +7,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class News {
+
     private String title, source, content;
     private URL url, imageURL;
     private Date datePublished;
+
+    public static void main(String args[]) {
+        System.out.println("hello world");
+    }
 
     public News (String title, String source, String content,
                  String url, String imageURL,
@@ -86,5 +91,17 @@ public class News {
 
     public void setDatePublished(Date datePublished) {
         this.datePublished = datePublished;
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "title='" + title + '\'' +
+                ", source='" + source + '\'' +
+                ", content='" + content + '\'' +
+                ", url=" + url.toString() +
+                ", imageURL=" + imageURL.toString() +
+                ", datePublished=" + datePublished.toString() +
+                '}';
     }
 }
