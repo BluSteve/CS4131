@@ -1,5 +1,6 @@
 package com.stevecao.assignment2;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class NewsFragment extends Fragment {
     TabLayout newsTabLayout;
     TabItem localNewsTab;
     TabItem globalNewsTab;
+    SharedPreferences prefs;
     static LocalNewsFragment localNewsFragment, globalNewsFragment;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -30,7 +32,7 @@ public class NewsFragment extends Fragment {
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        prefs = getView().getContext().getSharedPreferences("com.stevecao.assignment2", Context.MODE_PRIVATE);
         newsViewPager = getView().findViewById(R.id.newsViewPager);
         newsTabLayout = getView().findViewById(R.id.newsTabLayout);
         localNewsTab = getView().findViewById(R.id.localNewsTab);
@@ -43,27 +45,11 @@ public class NewsFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (localNewsFragment!=null&&globalNewsFragment!=null) {
-//            localNewsFragment.onResume();
-//            globalNewsFragment.onResume();
-//        }
-//        NewsPagerAdapter newsPagerAdapter = new NewsPagerAdapter(getContext(), getFragmentManager());
-//        newsViewPager.setAdapter(newsPagerAdapter);
-//        newsTabLayout.setupWithViewPager(newsViewPager);
-//        Log.d("localnews", "resumed1");
-//    }
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (localNewsFragment!=null&&globalNewsFragment!=null) {
-//            localNewsFragment.onPause();
-//            globalNewsFragment.onPause();
-//        }
-//        Log.d("localnews", "paused1");
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public class NewsPagerAdapter extends FragmentPagerAdapter {
         Context context;
         public NewsPagerAdapter(Context context, @NonNull FragmentManager fm) {
@@ -73,15 +59,14 @@ public class NewsFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i){
+            String newslang = prefs.getString("com.stevecao.assignment2.newslang", "en");
             if (i==0) {
-                LocalNewsFragment localNewsFragment = new LocalNewsFragment("https://newsapi.org/v2/top-headlines?q=c" +
-                        "oronavirus&language=en&country=sg&apiKey=98d25766996b4d85a81df8c048cffe35");
+                LocalNewsFragment localNewsFragment = new LocalNewsFragment(false);
                 NewsFragment.localNewsFragment = localNewsFragment;
                 return localNewsFragment;
             }
             else {
-                LocalNewsFragment globalNewsFragment = new LocalNewsFragment("https://newsapi.org/v2/top-headlines?q=c" +
-                        "oronavirus&language=en&apiKey=98d25766996b4d85a81df8c048cffe35");
+                LocalNewsFragment globalNewsFragment = new LocalNewsFragment(true);
                 NewsFragment.globalNewsFragment = globalNewsFragment;
                 return globalNewsFragment;
             }

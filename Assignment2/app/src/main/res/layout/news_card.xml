@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="15dp"
+    android:layout_marginVertical="5dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        style="@style/CustomCardViewStyle"
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true">
@@ -28,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:text="TextView"
-                android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <TextView
@@ -37,7 +35,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:text="TextView"
-                android:textColor="#CDFFFFFF"
                 android:textSize="14sp" />
 
             <TextView
@@ -46,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:text="TextView"
-                android:textColor="#B2FFFFFF"
                 android:textSize="12sp" />
 
             <ImageView

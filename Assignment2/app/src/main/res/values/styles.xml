@@ -1,14 +1,10 @@
 <resources>
-
-    <!-- Base application theme. -->
     <style name="AppThemeDark" parent="Theme.MaterialComponents">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="fontFamily">@font/montserrat</item>
     </style>
     <style name="AppThemeLight" parent="Theme.MaterialComponents.Light">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="fontFamily">@font/montserrat</item>
@@ -16,8 +12,4 @@
     <style name="BottomNavigationViewTextStyle">
         <item name="android:textSize">12sp</item>
     </style>
-    <style name="CustomCardViewStyle" parent="CardView">
-        <item name="cardBackgroundColor">@color/backgroundColorSecondary</item>
-    </style>
-
 </resources>

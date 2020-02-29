@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Assignment2</string>
+    <string name="app_name">COVIDn\'t</string>
     <string name="title_news">News</string>
     <string name="title_temperature">Temperature</string>
     <string name="title_travel">Travel</string>
@@ -7,4 +7,24 @@
     <string name="title_settings">Settings</string>
     <string name="localNewsTab">LOCAL</string>
     <string name="globalNewsTab">GLOBAL</string>
+    <string name="settings_theme">Dark mode</string>
+    <string name="emailHint">Enter NUSH email</string>
+    <string name="passwordHint">Password</string>
+    <string name="temperatureHint">°C</string>
+    <string name="loginBtn">LOGIN</string>
+    <string name="logoutBtn">LOGOUT</string>
+    <string name="signUpBtn">SIGN UP</string>
+    <string name="loginSubmitBtn">LOGIN</string>
+    <string name="temperatureSubmitBtn">SUBMIT</string>
+    <string name="noUser">Please log-in to use this feature.</string>
+    <string name="travel_dateHint">Date of leaving</string>
+    <string name="travel_durationHint">Duration (days)</string>
+    <string name="travel_cityHint">Destination city</string>
+    <string name="travel_countryHint">Destination country</string>
+    <string-array name="newsLanguages">
+        <item>English</item>
+        <item>French</item>
+        <item>Spanish</item>
+        <item>German</item>
+    </string-array>
 </resources>

@@ -17,6 +17,7 @@ import java.util.Scanner;
 public class NewsHandler {
     URL apiURL;
     ArrayList<News> newsArrayList = new ArrayList<News>(0);
+
     public NewsHandler(String rawAPIURL) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -27,7 +28,8 @@ public class NewsHandler {
             connection.setRequestMethod("GET");
             connection.connect();
             int responseCode = connection.getResponseCode();
-            if (responseCode!=200) throw new RuntimeException("HttpResponseCode: " +responseCode);
+            if (responseCode != 200)
+                throw new RuntimeException("HttpResponseCode: " + responseCode);
             else {
                 Scanner s = new Scanner(apiURL.openStream());
                 String inline = s.nextLine();
@@ -37,26 +39,33 @@ public class NewsHandler {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                 JsonArray newses = jsonObject.get("articles").getAsJsonArray(); // array of articles/newses
 
-                for (JsonElement je: newses) {
+                for (JsonElement je : newses) {
                     JsonObject rawNews = je.getAsJsonObject();
                     String content = "";
-                    if (!rawNews.get("content").isJsonNull()) content = rawNews.get("content").getAsString();
+                    if (!rawNews.get("content").isJsonNull())
+                        content = rawNews.get("content").getAsString();
                     try {
                         News news = new News(rawNews.get("title").getAsString(),
                                 rawNews.get("source").getAsJsonObject().get("name").getAsString(),
                                 content, rawNews.get("url").getAsString(),
                                 rawNews.get("urlToImage").getAsString(),
                                 rawNews.get("publishedAt").getAsString());
-                        newsArrayList.add(news);
-                    }
-                    catch (Exception e) {
+                        boolean existing = false;
+                        for (News n : newsArrayList) {
+                            if (n.getTitle().equals(news.getTitle()))
+                                existing = true;
+                        }
+                        if (!existing)
+                            newsArrayList.add(news);
+                    } catch (Exception e) {
                         continue;
                     }
 
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {e.printStackTrace();}
     }
 
     public URL getApiURL() {
