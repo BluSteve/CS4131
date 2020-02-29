@@ -1,6 +1,7 @@
 package com.stevecao.assignment2.model;
 
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -8,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,7 +19,6 @@ public class NewsHandler {
     ArrayList<News> newsArrayList = new ArrayList<News>(0);
     public NewsHandler(String rawAPIURL) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
         try {
             this.apiURL = new URL(rawAPIURL);
@@ -36,14 +37,22 @@ public class NewsHandler {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                 JsonArray newses = jsonObject.get("articles").getAsJsonArray(); // array of articles/newses
 
-                for (int x = 0; x < newses.size(); x++) {
-                    JsonObject rawNews = newses.get(x).getAsJsonObject();
-                    News news = new News(rawNews.get("title").getAsString(),
-                            rawNews.get("source").getAsJsonObject().get("name").getAsString(),
-                            rawNews.get("content").getAsString(), rawNews.get("url").getAsString(),
-                            rawNews.get("urlToImage").getAsString(),
-                            rawNews.get("publishedAt").getAsString());
-                    newsArrayList.add(news);
+                for (JsonElement je: newses) {
+                    JsonObject rawNews = je.getAsJsonObject();
+                    String content = "";
+                    if (!rawNews.get("content").isJsonNull()) content = rawNews.get("content").getAsString();
+                    try {
+                        News news = new News(rawNews.get("title").getAsString(),
+                                rawNews.get("source").getAsJsonObject().get("name").getAsString(),
+                                content, rawNews.get("url").getAsString(),
+                                rawNews.get("urlToImage").getAsString(),
+                                rawNews.get("publishedAt").getAsString());
+                        newsArrayList.add(news);
+                    }
+                    catch (Exception e) {
+                        continue;
+                    }
+
                 }
             }
         }

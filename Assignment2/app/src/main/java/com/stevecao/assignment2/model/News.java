@@ -12,23 +12,15 @@ public class News {
     private URL url, imageURL;
     private Date datePublished;
 
-    public static void main(String args[]) {
-        System.out.println("hello world");
-    }
 
     public News (String title, String source, String content,
                  String url, String imageURL,
-                 String rawDatePublished){
+                 String rawDatePublished) throws MalformedURLException{
         this.title = title;
         this.source = source;
         this.content = content;
-        try {
-            this.url = new URL(url);
-            this.imageURL = new URL(imageURL);
-        }
-        catch (MalformedURLException e){
-            e.printStackTrace();
-        }
+        this.url = new URL(url);
+        this.imageURL = new URL(imageURL);
         this.datePublished = getDateFromString(rawDatePublished);
     }
 
@@ -93,15 +85,20 @@ public class News {
         this.datePublished = datePublished;
     }
 
+    public String getDatePublishedString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return formatter.format(datePublished);
+    }
     @Override
     public String toString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return "News{" +
                 "title='" + title + '\'' +
                 ", source='" + source + '\'' +
                 ", content='" + content + '\'' +
                 ", url=" + url.toString() +
                 ", imageURL=" + imageURL.toString() +
-                ", datePublished=" + datePublished.toString() +
+                ", datePublished=" + formatter.format(datePublished) +
                 '}';
     }
 }

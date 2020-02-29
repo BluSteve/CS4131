@@ -21,6 +21,7 @@ public class NewsFragment extends Fragment {
     TabLayout newsTabLayout;
     TabItem localNewsTab;
     TabItem globalNewsTab;
+    static LocalNewsFragment localNewsFragment, globalNewsFragment;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,20 +30,40 @@ public class NewsFragment extends Fragment {
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        NewsHandler newsHandler = new NewsHandler("https://newsapi.org/v2/top-headlines?q=coronavirus&language=en&country=sg&apiKey=98d25766996b4d85a81df8c048cffe35");
-        Log.d("news", newsHandler.toString());
+
         newsViewPager = getView().findViewById(R.id.newsViewPager);
         newsTabLayout = getView().findViewById(R.id.newsTabLayout);
         localNewsTab = getView().findViewById(R.id.localNewsTab);
         globalNewsTab= getView().findViewById(R.id.globalNewsTab);
 
 
-        NewsPagerAdapter newsPagerAdapter = new NewsPagerAdapter(getContext(), getFragmentManager());
+        NewsPagerAdapter newsPagerAdapter = new NewsPagerAdapter(getContext(), getChildFragmentManager());
         newsViewPager.setAdapter(newsPagerAdapter);
         newsTabLayout.setupWithViewPager(newsViewPager);
 
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (localNewsFragment!=null&&globalNewsFragment!=null) {
+//            localNewsFragment.onResume();
+//            globalNewsFragment.onResume();
+//        }
+//        NewsPagerAdapter newsPagerAdapter = new NewsPagerAdapter(getContext(), getFragmentManager());
+//        newsViewPager.setAdapter(newsPagerAdapter);
+//        newsTabLayout.setupWithViewPager(newsViewPager);
+//        Log.d("localnews", "resumed1");
+//    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (localNewsFragment!=null&&globalNewsFragment!=null) {
+//            localNewsFragment.onPause();
+//            globalNewsFragment.onPause();
+//        }
+//        Log.d("localnews", "paused1");
+//    }
     public class NewsPagerAdapter extends FragmentPagerAdapter {
         Context context;
         public NewsPagerAdapter(Context context, @NonNull FragmentManager fm) {
@@ -52,8 +73,18 @@ public class NewsFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i){
-            if (i==0) return new LocalNewsFragment();
-            else return new GlobalNewsFragment();
+            if (i==0) {
+                LocalNewsFragment localNewsFragment = new LocalNewsFragment("https://newsapi.org/v2/top-headlines?q=c" +
+                        "oronavirus&language=en&country=sg&apiKey=98d25766996b4d85a81df8c048cffe35");
+                NewsFragment.localNewsFragment = localNewsFragment;
+                return localNewsFragment;
+            }
+            else {
+                LocalNewsFragment globalNewsFragment = new LocalNewsFragment("https://newsapi.org/v2/top-headlines?q=c" +
+                        "oronavirus&language=en&apiKey=98d25766996b4d85a81df8c048cffe35");
+                NewsFragment.globalNewsFragment = globalNewsFragment;
+                return globalNewsFragment;
+            }
         }
         @Override
         public int getCount() {
