@@ -3,12 +3,14 @@ package com.stevecao.assignment2;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +52,9 @@ public class TravelFragment extends Fragment {
     SortableTableView<String[]> travelTable;
     CardView travelCard;
     FirebaseFirestore db;
+    ImageView travelLoadingIV;
+    Context mContext;
+    boolean loggedIn;
     ArrayList<ArrayList<String>> travels = new ArrayList<>(0);
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,6 +69,8 @@ public class TravelFragment extends Fragment {
         travelTable = getView().findViewById(R.id.travelTable);
         travelCard = getView().findViewById(R.id.travelCard);
         travelNoUser = getView().findViewById(R.id.travelNoUser);
+        travelLoadingIV = getView().findViewById(R.id.travelLoadingIV);
+        mContext = getView().getContext();
 
         String[] test2 = new String[]{"Date", "Days", "Country", "City"};
         TableColumnWeightModel model = new TableColumnWeightModel(4);
@@ -88,16 +97,7 @@ public class TravelFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            travelCard.setVisibility(View.GONE);
-            fab.setVisibility(View.GONE);
-            travelNoUser.setVisibility(View.VISIBLE);
-        } else {
-            travelCard.setVisibility(View.VISIBLE);
-            fab.setVisibility(View.VISIBLE);
-            travelNoUser.setVisibility(View.GONE);
-            updateTable();
-        }
+        (new UpdateTravel()).execute();
     }
 
     private void updateTable() {
@@ -136,7 +136,7 @@ public class TravelFragment extends Fragment {
                             forTable[i] = row.toArray(new String[row.size()]);
 
                         }
-                        SimpleTableDataAdapter stda = new SimpleTableDataAdapter(getActivity(), forTable);
+                        SimpleTableDataAdapter stda = new SimpleTableDataAdapter(mContext, forTable);
                         stda.setTextColor(travelNoUser.getCurrentTextColor());
                         travelTable.setDataAdapter(stda);
                         for (int x = 0; x < travelTable.getColumnCount(); x++) {
@@ -160,7 +160,12 @@ public class TravelFragment extends Fragment {
             Log.d("compare", s1.length + "");
             switch (column) {
                 case 0:
-                    return s1[0].compareTo(s2[0]);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        return formatter.parse(s1[0]).compareTo(formatter.parse(s2[0]));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 case 1:
                     Integer ints1 = Integer.parseInt(s1[1]);
                     Integer ints2 = Integer.parseInt(s2[1]);
@@ -172,6 +177,39 @@ public class TravelFragment extends Fragment {
                 default:
                     return 0;
             }
+        }
+    }
+
+    private final class UpdateTravel extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            if (loggedIn)
+                updateTable();
+            return "Executed";
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                travelCard.setVisibility(View.GONE);
+                travelTable.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
+                travelNoUser.setVisibility(View.VISIBLE);
+            } else {
+                fab.setVisibility(View.VISIBLE);
+                travelNoUser.setVisibility(View.GONE);
+                Glide.with(getContext())
+                        .load(R.drawable.loading2)
+                        .into(travelLoadingIV);
+                travelLoadingIV.setVisibility(View.VISIBLE);
+                loggedIn = true;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            travelLoadingIV.setVisibility(View.GONE);
         }
     }
 }

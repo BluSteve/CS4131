@@ -1,31 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingHorizontal="50dp"
-    android:paddingTop="30dp">
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/emailText"
+    <ImageView
+        android:id="@+id/loginLoadingIV"
+        android:layout_width="217px"
+        android:layout_height="217px"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ac_unit_black_24dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/emailHint"
-        android:inputType="textEmailAddress" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/passwordText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/passwordHint"
-        android:inputType="textPassword" />
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="201dp"
-        android:layout_height="wrap_content"
-        android:text="@string/loginSubmitBtn" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/passwordText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/passwordHint"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:text="@string/loginSubmitBtn" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

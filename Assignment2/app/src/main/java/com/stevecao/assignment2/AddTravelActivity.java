@@ -52,22 +52,29 @@ public class AddTravelActivity extends AppCompatActivity {
         });
 
         travelSubmitBtn.setOnClickListener((s) -> {
-            int duration = Integer.parseInt(durationText.getText().toString());
-            String destCity = destCityText.getText().toString();
-            String destCountry = destCountryText.getText().toString();
-            Map<String, Object> entry = new HashMap<>();
-            entry.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-            entry.put("duration", duration);
-            entry.put("city", destCity);
-            entry.put("country", destCountry);
-            entry.put("date", timestamp);
-            db.collection("travel")
-                    .add(entry)
-                    .addOnSuccessListener((p) -> {
-                        Intent intent = new Intent(AddTravelActivity.this, MainActivity.class);
-                        Toast.makeText(this, "Travel declaration recorded!", Toast.LENGTH_LONG).show();
-                        startActivity(intent);
-                    });
+            if (destCityText.getText().toString().equals("") ||
+                    destCountryText.getText().toString().equals("") ||
+                    durationText.getText().toString().equals("") ||
+                    timestamp == null)
+                Toast.makeText(this, "Please enter valid values!", Toast.LENGTH_SHORT).show();
+            else {
+                int duration = Integer.parseInt(durationText.getText().toString());
+                String destCity = destCityText.getText().toString();
+                String destCountry = destCountryText.getText().toString();
+                Map<String, Object> entry = new HashMap<>();
+                entry.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                entry.put("duration", duration);
+                entry.put("city", destCity);
+                entry.put("country", destCountry);
+                entry.put("date", timestamp);
+                db.collection("travel")
+                        .add(entry)
+                        .addOnSuccessListener((p) -> {
+                            Intent intent = new Intent(AddTravelActivity.this, MainActivity.class);
+                            Toast.makeText(this, "Travel declaration recorded!", Toast.LENGTH_LONG).show();
+                            startActivity(intent);
+                        });
+            }
         });
     }
 }

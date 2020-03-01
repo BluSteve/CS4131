@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -19,8 +21,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.stevecao.assignment2.model.NewsAdapter;
 import com.stevecao.assignment2.model.NewsHandler;
+
+import org.w3c.dom.Text;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class LocalNewsFragment extends Fragment {
     RecyclerView mainRecyclerView;
@@ -29,6 +42,7 @@ public class LocalNewsFragment extends Fragment {
     private String url;
     private boolean isGlobal;
     private Context mContext;
+
 
     public LocalNewsFragment(boolean isGlobal) {
 
@@ -55,6 +69,8 @@ public class LocalNewsFragment extends Fragment {
         super.onResume();
         (new UpdateNews()).execute();
     }
+
+
 
     private final class UpdateNews extends AsyncTask<Void, Void, String> {
         NewsAdapter newsAdapter;

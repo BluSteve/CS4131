@@ -18,6 +18,18 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/statisticsTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/statisticsTab" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/customNewsTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/customNewsTab" />
+
+            <com.google.android.material.tabs.TabItem
                 android:id="@+id/localNewsTab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,6 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/globalNewsTab" />
+
+
 
         </com.google.android.material.tabs.TabLayout>
     </androidx.viewpager.widget.ViewPager>
