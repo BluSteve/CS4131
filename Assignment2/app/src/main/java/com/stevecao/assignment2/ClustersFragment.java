@@ -2,6 +2,7 @@ package com.stevecao.assignment2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
+import com.stevecao.assignment2.model.Cluster;
+import com.stevecao.assignment2.model.ClusterHandler;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -52,72 +56,51 @@ public class ClustersFragment extends Fragment implements OnMapReadyCallback {
         clustersLoadingIV.setVisibility(View.VISIBLE);
         clustersLoadingIV.bringToFront();
     }
+    private void updateMaps(GoogleMap googleMap) {
+        LatLng sg = new LatLng(1.294306, 103.816316);
+        for (Cluster cluster : clusters) {
+            LatLng latLng = new LatLng(cluster.getLocation().getLatitude(),
+                    cluster.getLocation().getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(cluster.getName() + " - " + cluster.getCases() + " Cases"));
+        }
 
-    private void updateMap() {
-
+        clustersLoadingIV.setVisibility(View.GONE);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sg, 10));
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         db = FirebaseFirestore.getInstance();
         db.collection("clusters").get()
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful()) {
-                        clustersLoadingIV.setVisibility(View.GONE);
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             int cases = Integer.parseInt(document.get("cases").toString());
                             String name = document.get("name").toString();
-                            GeoPoint location = document.getGeoPoint("location");
-                            clusters.add(new Cluster(name, cases, location));
+                            if (document.getGeoPoint("location") != null) {
+                                GeoPoint location = document.getGeoPoint("location");
+                                clusters.add(new Cluster(name, cases, location));
+
+                            } else {
+                                Cluster temp = new Cluster(name, cases);
+                                clusters.add(temp);
+                                Map<String, Object> entry = new HashMap<>();
+                                entry.put("location", temp.getLocation());
+                                db.collection("clusters")
+                                        .document(document.getId())
+                                        .set(entry, SetOptions.merge())
+                                        .addOnSuccessListener((editTask) -> {
+                                            Log.d("edittask", document.getId());
+                                        });
+                            }
+                            updateMaps(googleMap);
+
                         }
-                        LatLng sg = new LatLng(1.294306, 103.816316);
-                        for (Cluster cluster: clusters) {
-                            LatLng latLng = new LatLng(cluster.getLocation().getLatitude(),
-                                    cluster.getLocation().getLongitude());
-                            googleMap.addMarker(new MarkerOptions().position(latLng)
-                                    .title(cluster.getName() + " - " + cluster.getCases() + " Cases"));
-                        }
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sg,10));
                     }
                 });
 
     }
 
-    private class Cluster {
-        private String name;
-        private int cases;
-        private GeoPoint location;
 
-        public Cluster(String name, int cases, GeoPoint location) {
-            this.name = name;
-            this.cases = cases;
-            this.location = location;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getCases() {
-            return cases;
-        }
-
-        public void setCases(int cases) {
-            this.cases = cases;
-        }
-
-        public GeoPoint getLocation() {
-            return location;
-        }
-
-        public void setLocation(GeoPoint location) {
-            this.location = location;
-        }
-
-
-    }
 }

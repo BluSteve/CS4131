@@ -44,4 +44,5 @@
     <string name="cases">Confirmed cases</string>
     <string name="lastUpdated">Last updated</string>
     <string name="deathProb">Probability of death</string>
+    <string name="newsLangText">News language:</string>
 </resources>

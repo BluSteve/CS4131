@@ -31,6 +31,11 @@
             android:text="@string/settings_theme"
             android:textSize="24sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/newsLangText" />
+
         <Spinner
             android:id="@+id/newsLangSpinner"
             android:layout_width="200dp"
