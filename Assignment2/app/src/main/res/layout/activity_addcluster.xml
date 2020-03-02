@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="50dp"
+    android:paddingTop="30dp">
+    <ImageView
+        android:id="@+id/addClusterLoadingIV"
+        android:layout_width="217px"
+        android:layout_height="217px"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ac_unit_black_24dp" />
+    <Spinner
+        android:id="@+id/clusterSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/locationText"
+        android:layout_width="303dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/clusters_locationHint"
+        android:inputType="text"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/casesText"
+        android:layout_width="63dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/clusters_casesHint"
+        android:inputType="number"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/clusterSubmitBtn"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:text="@string/temperatureSubmitBtn" />
+</LinearLayout>

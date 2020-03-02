@@ -27,7 +27,7 @@ public class AddTravelActivity extends AppCompatActivity {
     CalendarView calendarView;
     Button travelSubmitBtn;
     FirebaseFirestore db;
-    Timestamp timestamp;
+    Timestamp timestamp = new Timestamp(new Date(Calendar.getInstance().getTimeInMillis()));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

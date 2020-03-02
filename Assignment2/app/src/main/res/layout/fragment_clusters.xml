@@ -26,4 +26,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.stevecao.assignment2.MainActivity"></fragment>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addCluster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="65dp"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

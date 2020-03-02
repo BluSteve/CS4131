@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
     EditText emailText, passwordText;
@@ -61,9 +62,22 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        loginLoadingIV.setVisibility(View.GONE);
-                                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        FirebaseFirestore.getInstance().collection("admins")
+                                                .whereEqualTo("email", email)
+                                                .get()
+                                                .addOnCompleteListener((task2) -> {
+                                                    if (task2.getResult().getDocuments().size() > 0) {
+                                                        prefs.edit().putBoolean("isAdmin", true).apply();
+                                                        loginLoadingIV.setVisibility(View.GONE);
+                                                        Toast.makeText(LoginActivity.this, "Admin login successful!", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                    } else {
+                                                        prefs.edit().putBoolean("isAdmin", false).apply();
+                                                        loginLoadingIV.setVisibility(View.GONE);
+                                                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                    }
+                                                });
                                     } else {
                                         loginLoadingIV.setVisibility(View.GONE);
                                         emailText.setVisibility(View.VISIBLE);

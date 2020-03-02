@@ -2,11 +2,13 @@
     <style name="AppThemeDark" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="fontFamily">@font/montserrat</item>
     </style>
     <style name="AppThemeLight" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="fontFamily">@font/montserrat</item>
     </style>
     <style name="BottomNavigationViewTextStyle">

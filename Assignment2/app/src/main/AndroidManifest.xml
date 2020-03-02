@@ -24,7 +24,7 @@
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".AddTempActivity"></activity>
         <activity android:name=".AddTravelActivity"></activity>
-
+        <activity android:name=".AddClusterActivity"></activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

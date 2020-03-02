@@ -2,6 +2,9 @@
 <resources>
     <color name="colorPrimary">#1E88E5</color>
     <color name="colorSecondary">#FFE082</color>
+    <color name="colorPrimaryDark">#005cb2</color>
+    <color name="graphColor1">#ec407a</color>
+    <color name="graphColor2">#00acc1</color>
     <color name="backgroundColorSecondary">#212122</color>
     <color name="backgroundColorSecondaryLight">#D0D0D0</color>
 </resources>

@@ -39,10 +39,17 @@
     <string name="notif_temperatureTitle">Measure your temperature!</string>
     <string name="notif_temperatureContent">Or else you will eventually drown in your bodily fluids</string>
     <string name="dorscon">DORSCON</string>
-    <string name="hospitalised">Hospitalised</string>
+    <string name="hospitalised_c">Hospitalised (Critical)</string>
+    <string name="hospitalised_s">Hospitalised (Stable)</string>
+    <string name="death">Death</string>
     <string name="discharged">Discharged</string>
     <string name="cases">Confirmed cases</string>
     <string name="lastUpdated">Last updated</string>
     <string name="deathProb">Probability of death</string>
     <string name="newsLangText">News language:</string>
+    <string name="clusters_locationHint">Location</string>
+    <string name="clusters_casesHint">Cases</string>
+    <string name="addClusterHint">ADD NEW CLUSTER</string>
+    <string name="internetFailure">CRITICAL INTERNET FAILURE!\n
+    Please reconnect</string>
 </resources>

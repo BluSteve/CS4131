@@ -39,6 +39,7 @@ public class StatisticsFragment extends Fragment {
     TextView mohInfoText;
     ImageView mohLoadingIV;
     PieChartView pieChartView;
+    private boolean isMohSuccessful;
     private ArrayList<String> mohInfo = new ArrayList<String>(0);
     private Context mContext;
 
@@ -67,7 +68,8 @@ public class StatisticsFragment extends Fragment {
             connection.connect();
             int responseCode = connection.getResponseCode();
             if (responseCode != 200)
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
+//                throw new RuntimeException("HttpResponseCode: " + responseCode);
+                isMohSuccessful = false;
             else {
                 Scanner s = new Scanner(mohUrl.openStream());
                 String inline = "";
@@ -80,13 +82,17 @@ public class StatisticsFragment extends Fragment {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                 JsonObject caseData = jsonObject.getAsJsonObject("caseData");
                 String dorscon = jsonObject.get("dorscon").getAsString();
-                String hospitalised = caseData.get("Hospitalised").getAsString();
+                String hospitalised_s = caseData.get("Hospitalised (Stable)").getAsString();
+                String hospitalised_c = caseData.get("Hospitalised (Critical)").getAsString();
+                String death = caseData.get("Death").getAsString();
                 String discharged = caseData.get("Discharged").getAsString();
-                String cases = caseData.get("Total Confirmed Cases").getAsString();
+                String cases = "" + (caseData.get("ACTIVE CASES").getAsInt() + caseData.get("Discharged").getAsInt());
+                Log.d("cases", cases);
                 String lastUpdated = jsonObject.get("lastUpdated").getAsString();
 
-                mohInfo.addAll(Arrays.asList(dorscon, hospitalised, discharged, cases, lastUpdated));
+                mohInfo.addAll(Arrays.asList(dorscon, hospitalised_s, hospitalised_c, death, discharged, cases, lastUpdated));
                 mohInfo.add("100%");
+                isMohSuccessful = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,20 +112,30 @@ public class StatisticsFragment extends Fragment {
         @Override
         protected String doInBackground(Void... voids) {
             getMohInfo();
-            ArrayList<SliceValue> pieData = new ArrayList<>(0);
-            double totalCases = Double.parseDouble(mohInfo.get(3));
-            pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(1)),
-                    mContext.getColor(R.color.colorPrimary)).setLabel(mContext.getString(R.string.hospitalised)
-                    + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(1)) / totalCases * 100.0)
-                    + "%"));
-            pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(2)),
-                    mContext.getColor(R.color.colorSecondary)).setLabel(mContext.getString(R.string.discharged)
-                    + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(2)) / totalCases * 100.0)
-                    + "%"));
-            PieChartData pieChartData = new PieChartData(pieData);
-            pieChartData.setHasLabels(true);
-            pieChartData.setValueLabelsTextColor(Color.BLACK);
-            pieChartView.setPieChartData(pieChartData);
+            if (isMohSuccessful) {
+                ArrayList<SliceValue> pieData = new ArrayList<>(0);
+                double totalCases = Double.parseDouble(mohInfo.get(5));
+                pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(1)),
+                        mContext.getColor(R.color.graphColor2)).setLabel(mContext.getString(R.string.hospitalised_s)
+                        + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(1)) / totalCases * 100.0)
+                        + "%"));
+                pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(2)),
+                        mContext.getColor(R.color.colorSecondary)).setLabel(mContext.getString(R.string.hospitalised_c)
+                        + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(2)) / totalCases * 100.0)
+                        + "%"));
+                pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(4)),
+                        mContext.getColor(R.color.colorPrimary)).setLabel(mContext.getString(R.string.discharged)
+                        + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(4)) / totalCases * 100.0)
+                        + "%"));
+//                pieData.add(new SliceValue(Integer.parseInt(mohInfo.get(3)),
+//                        mContext.getColor(R.color.graphColor1)).setLabel(mContext.getString(R.string.death)
+//                        + ": " + String.format("%.1f", Double.parseDouble(mohInfo.get(3)) / totalCases * 100.0)
+//                        + "%"));
+                PieChartData pieChartData = new PieChartData(pieData);
+                pieChartData.setHasLabels(true);
+                pieChartData.setValueLabelsTextColor(Color.BLACK);
+                pieChartView.setPieChartData(pieChartData);
+            }
             return "Executed";
         }
 
@@ -135,13 +151,20 @@ public class StatisticsFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             mohLoadingIV.setVisibility(View.GONE);
-            pieChartView.setVisibility(View.VISIBLE);
-            mohInfoText.setText(mContext.getText(R.string.dorscon) + ": " + mohInfo.get(0)
-                    + "\n" + mContext.getText(R.string.hospitalised) + ": " + mohInfo.get(1)
-                    + "\n" + mContext.getText(R.string.discharged) + ": " + mohInfo.get(2)
-                    + "\n" + mContext.getText(R.string.cases) + ": " + mohInfo.get(3)
-                    + "\n" + mContext.getText(R.string.lastUpdated) + ": " + mohInfo.get(4)
-                    + "\n" + mContext.getText(R.string.deathProb) + ": " + mohInfo.get(5));
+            if (isMohSuccessful) {
+                pieChartView.setVisibility(View.VISIBLE);
+                mohInfoText.setText(mContext.getText(R.string.dorscon) + ": " + mohInfo.get(0)
+                        + "\n" + mContext.getText(R.string.hospitalised_s) + ": " + mohInfo.get(1)
+                        + "\n" + mContext.getText(R.string.hospitalised_c) + ": " + mohInfo.get(2)
+                        + "\n" + mContext.getText(R.string.death) + ": " + mohInfo.get(3)
+                        + "\n" + mContext.getText(R.string.discharged) + ": " + mohInfo.get(4)
+                        + "\n" + mContext.getText(R.string.cases) + ": " + mohInfo.get(5)
+                        + "\n" + mContext.getText(R.string.lastUpdated) + ": " + mohInfo.get(6)
+                        + "\n" + mContext.getText(R.string.deathProb) + ": " + mohInfo.get(7));
+            }
+            else {
+                mohInfoText.setText(mContext.getString(R.string.internetFailure));
+            }
         }
     }
 }
