@@ -68,7 +68,6 @@ public class StatisticsFragment extends Fragment {
             connection.connect();
             int responseCode = connection.getResponseCode();
             if (responseCode != 200)
-//                throw new RuntimeException("HttpResponseCode: " + responseCode);
                 isMohSuccessful = false;
             else {
                 Scanner s = new Scanner(mohUrl.openStream());
@@ -86,7 +85,7 @@ public class StatisticsFragment extends Fragment {
                 String hospitalised_c = caseData.get("Hospitalised (Critical)").getAsString();
                 String death = caseData.get("Death").getAsString();
                 String discharged = caseData.get("Discharged").getAsString();
-                String cases = "" + (caseData.get("ACTIVE CASES").getAsInt() + caseData.get("Discharged").getAsInt());
+                String cases = "" + caseData.get("Total Confirmed Cases").getAsInt();
                 Log.d("cases", cases);
                 String lastUpdated = jsonObject.get("lastUpdated").getAsString();
 

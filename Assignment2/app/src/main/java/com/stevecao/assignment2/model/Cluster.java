@@ -17,12 +17,12 @@ import java.util.Scanner;
 public class Cluster {
     private String name, address, placeId, documentId;
     private int cases;
-    private GeoPoint location;
+    private GeoPoint geoPoint;
 
-    public Cluster(String name, int cases, GeoPoint location, String documentId) {
+    public Cluster(String name, int cases, GeoPoint geoPoint, String documentId) {
         this.name = name;
         this.cases = cases;
-        this.location = location;
+        this.geoPoint = geoPoint;
         this.documentId = documentId;
     }
 
@@ -69,7 +69,7 @@ public class Cluster {
 
                     this.name = name;
                     this.cases = cases;
-                    this.location = geoPoint;
+                    this.geoPoint = geoPoint;
                 }
             }
         } catch (IOException e) {
@@ -127,7 +127,7 @@ public class Cluster {
                 "name='" + name + '\'' +
                 ", documentId='" + documentId + '\'' +
                 ", cases=" + cases +
-                ", location=" + location +
+                ", location=" + geoPoint +
                 '}';
     }
 
@@ -171,13 +171,11 @@ public class Cluster {
         this.cases = cases;
     }
 
-    public GeoPoint getLocation() {
-        return location;
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
     }
 
-    public void setLocation(GeoPoint location) {
-        this.location = location;
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
     }
-
-
 }

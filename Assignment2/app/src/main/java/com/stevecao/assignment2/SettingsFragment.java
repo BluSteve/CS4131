@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -20,14 +22,18 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.stevecao.assignment2.model.ClinicHandler;
 
 public class SettingsFragment extends Fragment {
     Switch darkModeSwitch;
-    Button loginBtn, signUpBtn;
+    Button loginBtn, signUpBtn, updateClinicsBtn;
     Spinner newsLangSpinner;
+    ImageView settingsLoadingIV;
     SharedPreferences prefs;
+    Context mContext;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +47,12 @@ public class SettingsFragment extends Fragment {
         darkModeSwitch = getView().findViewById(R.id.darkModeSwitch);
         loginBtn = getView().findViewById(R.id.loginBtn);
         signUpBtn = getView().findViewById(R.id.signUpBtn);
+        updateClinicsBtn = getView().findViewById(R.id.updateClinicsBtn);
         newsLangSpinner = getView().findViewById(R.id.newsLangSpinner);
+        settingsLoadingIV = getView().findViewById(R.id.settingsLoadingIV);
+        mContext = getContext();
+
+        Glide.with(mContext).load(R.drawable.loading2).into(settingsLoadingIV);
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.newsLanguages, android.R.layout.simple_spinner_item);
@@ -81,6 +92,10 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        updateClinicsBtn.setOnClickListener((s) -> {
+            (new UpdateClinics()).execute();
+        });
+
         darkModeSwitch.setTypeface(ResourcesCompat.getFont(getContext(), R.font.montserrat));
         darkModeSwitch.setChecked(prefs.getBoolean("com.stevecao.assignment2.darkmode", true));
         darkModeSwitch.setOnCheckedChangeListener((button, isChecked) -> {
@@ -93,6 +108,26 @@ public class SettingsFragment extends Fragment {
         });
 
         updateBtns();
+    }
+
+    private final class UpdateClinics extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            ClinicHandler.updateClinics(mContext);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPreExecute() {
+            settingsLoadingIV.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            settingsLoadingIV.setVisibility(View.GONE);
+            Toast.makeText(mContext, "Clinics database update successful!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

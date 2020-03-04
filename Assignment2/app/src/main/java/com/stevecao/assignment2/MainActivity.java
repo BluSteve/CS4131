@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.stevecao.assignment2.model.ClinicHandler;
 import com.stevecao.assignment2.model.MyReceiver;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -51,7 +51,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         });
         holder.cardView.setOnLongClickListener((s) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("Share post");
+            builder.setTitle("Share Post");
             builder.setPositiveButton(mContext.getString(R.string.shareBtn),
                     (dialog, which) -> {
                         Intent sendIntent = new Intent();

@@ -17,8 +17,10 @@ public class ClusterStorage {
 
     public static Cluster getClusterByGeoPoint(GeoPoint geoPoint) {
         for (Cluster c: clusters) {
-            if (c.getLocation().equals(geoPoint))
+            if (Math.abs((c.getGeoPoint().getLatitude() - geoPoint.getLatitude()))  < 0.00001 &&
+                    Math.abs((c.getGeoPoint().getLongitude() - geoPoint.getLongitude())) < 0.00001) {
                 return c;
+            }
         }
         return null;
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -84,12 +85,7 @@ public class AddClusterActivity extends AppCompatActivity {
                         else {
                             GeoPoint coords = Cluster.getCoords(location);
                             if (coords != null) {
-                                boolean isExisting = false;
-                                for (Cluster c: ClusterStorage.getClusters()) {
-                                    if (coords.equals(c.getLocation()))
-                                        isExisting = true;
-                                }
-                                if (!isExisting) {
+                                if (ClusterStorage.getClusterByGeoPoint(coords) == null) {
                                     clusterSpinner.setVisibility(View.GONE);
                                     locationText.setVisibility(View.GONE);
                                     casesText.setVisibility(View.GONE);
@@ -104,12 +100,10 @@ public class AddClusterActivity extends AppCompatActivity {
                                                 Toast.makeText(context, "Cluster added!", Toast.LENGTH_SHORT).show();
                                                 startActivity(new Intent(context, MainActivity.class));
                                             });
-                                }
-                                else {
+                                } else {
                                     Toast.makeText(context, "Cluster already present!", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(context, "Please enter valid location!", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -125,9 +119,14 @@ public class AddClusterActivity extends AppCompatActivity {
                             clusterSpinner.setVisibility(View.GONE);
                             casesText.setVisibility(View.GONE);
                             clusterSubmitBtn.setVisibility(View.GONE);
+                            Log.d("clusterlocation", Cluster
+                                    .getCoords(parent.getItemAtPosition(position)
+                                            .toString()).toString());
+                            Log.d("clusterlocation", ClusterStorage.getClusters().toString());
                             String documentId = ClusterStorage.getClusterByGeoPoint(Cluster
                                     .getCoords(parent.getItemAtPosition(position)
                                             .toString())).getDocumentId();
+                            Log.d("locations", documentId);
                             db.collection("clusters").document(documentId)
                                     .update("cases", Integer.parseInt(casesStr))
                                     .addOnCompleteListener((task) -> {
