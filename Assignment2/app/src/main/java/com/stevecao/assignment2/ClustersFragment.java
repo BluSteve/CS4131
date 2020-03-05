@@ -1,5 +1,6 @@
 package com.stevecao.assignment2;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -89,7 +90,7 @@ public class ClustersFragment extends Fragment implements OnMapReadyCallback {
 
     private void updateMaps(GoogleMap googleMap) {
         LatLng sg = new LatLng(1.294306, 103.816316);
-
+        googleMap.setMyLocationEnabled(true);
         clinicSwitch.setOnCheckedChangeListener((a, b) -> {
             if (clinicSwitch.isChecked()) {
                 fab.setVisibility(View.GONE);

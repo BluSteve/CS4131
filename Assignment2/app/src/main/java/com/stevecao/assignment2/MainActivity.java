@@ -1,5 +1,6 @@
 package com.stevecao.assignment2;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
         createNotificationChannel();
 
         Intent intent = new Intent(this, MyReceiver.class);
