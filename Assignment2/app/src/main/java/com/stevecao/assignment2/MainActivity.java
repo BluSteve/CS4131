@@ -23,6 +23,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
+
+
         createNotificationChannel();
 
         Intent intent = new Intent(this, MyReceiver.class);

@@ -39,7 +39,8 @@ public class AddClusterActivity extends AppCompatActivity {
     String addClusterHint;
     Context context;
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences prefs = this.getSharedPreferences("com.stevecao.assignment2", Context.MODE_PRIVATE);
@@ -91,7 +92,7 @@ public class AddClusterActivity extends AppCompatActivity {
                                     casesText.setVisibility(View.GONE);
                                     clusterSubmitBtn.setVisibility(View.GONE);
                                     Map<String, Object> data = new HashMap<>();
-                                    data.put("name", WordUtils.capitalizeFully(location));
+                                    data.put("name", location);
                                     data.put("cases", Integer.parseInt(casesStr));
                                     db.collection("clusters")
                                             .add(data)
@@ -145,5 +146,5 @@ public class AddClusterActivity extends AppCompatActivity {
             }
 
         });
-    }
+}
 }

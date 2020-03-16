@@ -77,6 +77,7 @@ public class LocalNewsFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... voids) {
+
             if (isGlobal) {
 
                 url = prefs.getString("com.stevecao.assignment2.globalnewsurl", "https://newsapi.org/v2/top-headlines?q=c" +

@@ -9,14 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonWriter;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,6 +40,7 @@ public class ClinicHandler {
     }
 
     public static boolean updateClinicsFromCache(Context context) {
+        clinics.clear();
         File file = new File(context.getExternalFilesDir(null),
                 "clinicsCache.txt");
         if (!file.exists())
@@ -80,6 +77,7 @@ public class ClinicHandler {
     }
 
     public static boolean updateClinics(Context context) {
+        clinics.clear();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         try {
