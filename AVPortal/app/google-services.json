@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "639227432438",
+    "firebase_url": "https://avportal-84faa.firebaseio.com",
+    "project_id": "avportal-84faa",
+    "storage_bucket": "avportal-84faa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639227432438:android:6e8160a43151985619cbd7",
+        "android_client_info": {
+          "package_name": "com.stevecao.avportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639227432438-pmta93lancu0399pl7sjhcegq9gva6sk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stevecao.avportal",
+            "certificate_hash": "e0210f80d058aa65fa490236058f3a248ed4564a"
+          }
+        },
+        {
+          "client_id": "639227432438-tbskvr20p7fssqe63fdf2ac7vclm98jv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4U3ygyPeBdt6A4PtJd5nl_VT0NEUTyPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639227432438-tbskvr20p7fssqe63fdf2ac7vclm98jv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
