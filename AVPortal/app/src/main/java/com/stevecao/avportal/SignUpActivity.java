@@ -18,9 +18,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
-    EditText emailText, passwordText;
+    EditText emailText, passwordText, nameText;
     Button submitBtn;
     ImageView loginLoadingIV;
     private FirebaseAuth mAuth;
@@ -33,21 +36,26 @@ public class SignUpActivity extends AppCompatActivity {
             setTheme(R.style.AppThemeDark);
         else setTheme(R.style.AppThemeLight);
         setContentView(R.layout.activity_login);
+        nameText = findViewById(R.id.nameText);
         emailText = findViewById(R.id.emailText);
         passwordText = findViewById(R.id.passwordText);
         submitBtn = findViewById(R.id.submitBtn);
         loginLoadingIV = findViewById(R.id.loginLoadingIV);
         mAuth = FirebaseAuth.getInstance();
+
+        nameText.setVisibility(View.VISIBLE);
         submitBtn.setText(getString(R.string.signUpBtn));
         Glide.with(this).load(R.drawable.loading2).into(loginLoadingIV);
 
         submitBtn.setOnClickListener((s) -> {
             if (emailText.getText().toString().equals("") ||
-                    passwordText.getText().toString().equals(""))
+                    passwordText.getText().toString().equals("") ||
+                    nameText.getText().toString().equals(""))
                 Toast.makeText(this, "Please enter valid values!", Toast.LENGTH_SHORT).show();
             else {
                 String email = emailText.getText().toString();
                 String password = passwordText.getText().toString();
+                String name = nameText.getText().toString();
                 String emailDomain = email.substring(email.indexOf('@') + 1);
                 if (emailDomain.equals("nus.edu.sg") || emailDomain.equals("nushigh.edu.sg")) {
                     if (password.length() >= 8) {
@@ -55,18 +63,30 @@ public class SignUpActivity extends AppCompatActivity {
                         emailText.setVisibility(View.GONE);
                         submitBtn.setVisibility(View.GONE);
                         passwordText.setVisibility(View.GONE);
+                        nameText.setVisibility(View.GONE);
                         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
                                 new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            loginLoadingIV.setVisibility(View.GONE);
-                                            Toast.makeText(SignUpActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("isAdmin", false);
+                                            hashMap.put("name", name);
+                                            hashMap.put("email", email);
+                                            FirebaseFirestore.getInstance().collection("users")
+                                                    .add(hashMap)
+                                                    .addOnSuccessListener((task2) -> {
+                                                        loginLoadingIV.setVisibility(View.GONE);
+                                                        Toast.makeText(SignUpActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                                    });
+
                                         } else {
                                             loginLoadingIV.setVisibility(View.GONE);
                                             emailText.setVisibility(View.VISIBLE);
                                             submitBtn.setVisibility(View.VISIBLE);
+                                            nameText.setVisibility(View.VISIBLE);
                                             passwordText.setVisibility(View.VISIBLE);
                                             Toast.makeText(SignUpActivity.this, "Sign-up failed!", Toast.LENGTH_SHORT).show();
                                         }

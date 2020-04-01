@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'androidx.preference:preference:1.1.0-rc01'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'

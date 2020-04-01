@@ -3,12 +3,14 @@ package com.stevecao.avportal;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.core.widget.ImageViewCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextView nameTV, emailTV;
     ImageView pfpIV;
     Button loginBtn, signUpBtn;
+    ImageButton darkModeBtn;
     LinearLayout navLL;
     Toolbar toolbar;
     private AppBarConfiguration mAppBarConfiguration;
@@ -50,13 +54,23 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SignUpActivity.class);
             startActivity(intent);
         });
+        if (toolbar.getMenu().findItem(R.id.action_logout) != null) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                toolbar.getMenu().findItem(R.id.action_logout).setVisible(true);
+            } else {
+                toolbar.getMenu().findItem(R.id.action_logout).setVisible(false);
+            }
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = this.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("com.stevecao.avportal.darkMode", true))
+            setTheme(R.style.AppThemeDark);
+        else setTheme(R.style.AppThemeLight);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences prefs = this.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -64,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("ddd", "ddd");
             switch (item.getItemId()) {
                 case R.id.action_settings:
-                    // TODO change to settings activity
+                    Intent intent = new Intent(this, SettingsActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.action_logout:
                     FirebaseAuth.getInstance().signOut();
@@ -80,9 +95,14 @@ public class MainActivity extends AppCompatActivity {
         emailTV = headerView.findViewById(R.id.emailTV);
         loginBtn = headerView.findViewById(R.id.loginBtn);
         signUpBtn = headerView.findViewById(R.id.signUpBtn);
+        darkModeBtn = navigationView.findViewById(R.id.darkModeBtn);
         pfpIV = headerView.findViewById(R.id.pfpIV);
         navLL = headerView.findViewById(R.id.navLL);
 
+        if (prefs.getBoolean("com.stevecao.avportal.darkMode", true))
+            ImageViewCompat.setImageTintList(darkModeBtn, ColorStateList.valueOf(getColor(R.color.white)));
+        else if (!prefs.getBoolean("com.stevecao.avportal.darkMode", true))
+            ImageViewCompat.setImageTintList(darkModeBtn, ColorStateList.valueOf(getColor(R.color.black)));
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Log.d("login", FirebaseAuth.getInstance().getCurrentUser() + "");
             loginBtn.setVisibility(View.GONE);
@@ -90,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
             FirebaseUser cUser = FirebaseAuth.getInstance().getCurrentUser();
             emailTV.setText(cUser.getEmail());
-            nameTV.setText(prefs.getString("name", cUser.getEmail().split("@")[0]));
+            nameTV.setText(prefs.getString("com.stevecao.avportal.name", cUser.getEmail().split("@")[0]));
             navLL.setGravity(Gravity.BOTTOM);
 
             emailTV.setVisibility(View.VISIBLE);
@@ -99,8 +119,22 @@ public class MainActivity extends AppCompatActivity {
         } else {
             updateViews();
         }
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        darkModeBtn.setOnClickListener((s) -> {
+            boolean isDark = prefs.getBoolean("com.stevecao.avportal.darkMode", true);
+            if (isDark) {
+                prefs.edit().putBoolean("com.stevecao.avportal.darkMode", false).apply();
+                isDark = prefs.getBoolean("com.stevecao.avportal.darkMode", true);
+                darkModeBtn.setImageResource(R.drawable.ic_sun_black_24dp);
+            }
+            else {
+                prefs.edit().putBoolean("com.stevecao.avportal.darkMode", true).apply();
+                darkModeBtn.setImageResource(R.drawable.ic_moon_black_24dp);
+            }
+            Toast.makeText(this, "Restart app to see changes.", Toast.LENGTH_SHORT).show();
+
+        });
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment)
                 .setDrawerLayout(drawer)
@@ -113,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (toolbar. != null) {
+        if (toolbar.getMenu().findItem(R.id.action_logout) != null) {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 toolbar.getMenu().findItem(R.id.action_logout).setVisible(true);
             } else {

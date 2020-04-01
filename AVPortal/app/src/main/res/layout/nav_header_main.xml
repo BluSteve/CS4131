@@ -17,7 +17,7 @@
         android:id="@+id/signUpBtn"
         android:layout_width="165dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="25dp"
         android:text="@string/signUpBtn" />
 
     <Button
