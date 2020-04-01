@@ -24,7 +24,17 @@ android {
 }
 
 dependencies {
+    implementation 'de.codecrafters.tableview:tableview:2.8.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
