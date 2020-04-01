@@ -3,41 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_announcements">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.stevecao.avportal.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
+        android:id="@+id/nav_announcements"
+        android:name="com.stevecao.avportal.fragment.AnnouncementsFragment"
+        android:label="@string/menu_announcements"
+        tools:layout="@layout/fragment_announcements">
     </fragment>
     <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.stevecao.avportal.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
+        android:id="@+id/nav_events"
+        android:name="com.stevecao.avportal.fragment.EventsFragment"
+        android:label="@string/menu_events"
+        tools:layout="@layout/fragment_events" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.stevecao.avportal.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.stevecao.avportal.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_equipment"
+        android:name="com.stevecao.avportal.fragment.EquipmentFragment"
+        android:label="@string/menu_equipment"
+        tools:layout="@layout/fragment_equipment" />
 </navigation>

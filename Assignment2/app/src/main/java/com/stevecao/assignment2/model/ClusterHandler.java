@@ -85,12 +85,15 @@ public class ClusterHandler {
                                 .document(id)
                                 .update("cases", cases);
                     } else { // new
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("name", location);
-                        data.put("cases", cases);
-                        data.put("location", Cluster.getCoords(location));
-                        db.collection("clusters")
-                                .add(data);
+                        GeoPoint gp = Cluster.getCoords(location);
+                        if (gp!=null) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("name", location);
+                            data.put("cases", cases);
+                            data.put("location", gp);
+                            db.collection("clusters")
+                                    .add(data);
+                        }
                     }
 
 

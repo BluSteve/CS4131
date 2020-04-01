@@ -1,0 +1,21 @@
+package com.stevecao.avportal.fragment;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.stevecao.avportal.R;
+
+public class EquipmentFragment extends Fragment {
+
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_equipment, container, false);
+        return root;
+    }
+}
