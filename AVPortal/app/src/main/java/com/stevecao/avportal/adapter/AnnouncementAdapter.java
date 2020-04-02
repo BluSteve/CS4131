@@ -1,15 +1,24 @@
 package com.stevecao.avportal.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.UnderlineSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.stevecao.avportal.R;
@@ -19,14 +28,17 @@ import java.util.ArrayList;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.MyViewHolder> {
     private Context mContext;
+    private ViewGroup container;
     private ArrayList<Announcement> anns;
 
     public AnnouncementAdapter(Context mContext, ArrayList<Announcement> anns) {
         this.mContext = mContext;
         this.anns = anns;
     }
+
     @Override
     public AnnouncementAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.container = parent;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_card, parent, false);
         return new MyViewHolder(itemView);
@@ -39,6 +51,37 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.sourceTV.setText(ann.getAuthor());
         holder.dateTV.setText(ann.getStringDate());
         Glide.with(mContext).load(ann.getImageUrl()).into(holder.imageView);
+
+        holder.cardView.setOnClickListener((s) -> {
+            View newsPopup = LayoutInflater.from(mContext)
+                    .inflate(R.layout.news_popup, container, false);
+            TextView ppTitleTV, ppSourceTV, ppDateTV, ppContentTV;
+            ImageView ppImageView;
+            ppTitleTV = newsPopup.findViewById(R.id.ppTitleTV);
+            ppSourceTV = newsPopup.findViewById(R.id.ppSourceTV);
+            ppDateTV = newsPopup.findViewById(R.id.ppDateTV);
+            ppContentTV = newsPopup.findViewById(R.id.ppContentTV);
+            ppImageView = newsPopup.findViewById(R.id.ppImageView);
+
+            SpannableString annTitle = new SpannableString(ann.getTitle());
+            annTitle.setSpan(new UnderlineSpan(), 0, annTitle.length(), 0);
+            ppTitleTV.setText(annTitle);
+            ppTitleTV.setMovementMethod(LinkMovementMethod.getInstance());
+            ppTitleTV.setOnClickListener((s2) -> {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ann.getUrl().toString()));
+                mContext.startActivity(intent);
+            });
+            ppSourceTV.setText(ann.getAuthor());
+            ppDateTV.setText(ann.getStringDate());
+            ppContentTV.setText(ann.getContent());
+            Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
+            PopupWindow popup = new PopupWindow(newsPopup,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    true);
+            popup.showAtLocation(holder.cardView, Gravity.CENTER, 0, 0);
+
+        });
     }
 
     @Override

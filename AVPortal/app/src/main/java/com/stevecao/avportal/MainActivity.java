@@ -99,10 +99,13 @@ public class MainActivity extends AppCompatActivity {
         pfpIV = headerView.findViewById(R.id.pfpIV);
         navLL = headerView.findViewById(R.id.navLL);
 
-        if (prefs.getBoolean("com.stevecao.avportal.darkMode", true))
+        if (prefs.getBoolean("com.stevecao.avportal.darkMode", true)) {
             ImageViewCompat.setImageTintList(darkModeBtn, ColorStateList.valueOf(getColor(R.color.white)));
-        else if (!prefs.getBoolean("com.stevecao.avportal.darkMode", true))
+            darkModeBtn.setImageResource(R.drawable.ic_moon_black_24dp);
+        } else if (!prefs.getBoolean("com.stevecao.avportal.darkMode", true)) {
+            darkModeBtn.setImageResource(R.drawable.ic_sun_black_24dp);
             ImageViewCompat.setImageTintList(darkModeBtn, ColorStateList.valueOf(getColor(R.color.black)));
+        }
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Log.d("login", FirebaseAuth.getInstance().getCurrentUser() + "");
             loginBtn.setVisibility(View.GONE);
@@ -126,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putBoolean("com.stevecao.avportal.darkMode", false).apply();
                 isDark = prefs.getBoolean("com.stevecao.avportal.darkMode", true);
                 darkModeBtn.setImageResource(R.drawable.ic_sun_black_24dp);
-            }
-            else {
+            } else {
                 prefs.edit().putBoolean("com.stevecao.avportal.darkMode", true).apply();
                 darkModeBtn.setImageResource(R.drawable.ic_moon_black_24dp);
             }
