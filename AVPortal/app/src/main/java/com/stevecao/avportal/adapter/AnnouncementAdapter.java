@@ -1,5 +1,6 @@
 package com.stevecao.avportal.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.stevecao.avportal.R;
@@ -40,7 +40,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     public AnnouncementAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.container = parent;
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_card, parent, false);
+                .inflate(R.layout.ann_card, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -54,7 +54,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
         holder.cardView.setOnClickListener((s) -> {
             View newsPopup = LayoutInflater.from(mContext)
-                    .inflate(R.layout.news_popup, container, false);
+                    .inflate(R.layout.ann_popup, container, false);
             TextView ppTitleTV, ppSourceTV, ppDateTV, ppContentTV;
             ImageView ppImageView;
             ppTitleTV = newsPopup.findViewById(R.id.ppTitleTV);
@@ -75,6 +75,25 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             ppDateTV.setText(ann.getStringDate());
             ppContentTV.setText(ann.getContent());
             Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
+            ppImageView.setOnLongClickListener((s3) -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Share Post");
+                builder.setPositiveButton(mContext.getString(R.string.shareBtn),
+                        (dialog, which) -> {
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(ann.getImageUrl().toString()));
+                            sendIntent.setType("image/jpg");
+
+                            Intent shareIntent = Intent.createChooser(sendIntent, null);
+                            mContext.startActivity(shareIntent);
+
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+            });
+
             PopupWindow popup = new PopupWindow(newsPopup,
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT,

@@ -5,10 +5,10 @@
     android:id="@+id/announcementsCL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.AnnouncementsFragment">
+    tools:context=".fragment.EventsFragment">
 
     <TextView
-        android:id="@+id/localNewsNoUser"
+        android:id="@+id/announcementsNoUser"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginTop="32dp"
@@ -35,7 +35,7 @@
         app:srcCompat="@drawable/loading2" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainRecyclerView"
+        android:id="@+id/announcementsRV"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="visible"

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_announcements"
-        android:name="com.stevecao.avportal.fragment.AnnouncementsFragment"
+        android:name="com.stevecao.avportal.fragment.EventsFragment"
         android:label="@string/menu_announcements"
         tools:layout="@layout/fragment_announcements">
     </fragment>

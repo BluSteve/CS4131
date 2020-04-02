@@ -48,8 +48,8 @@ public class AnnouncementsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         mContext = view.getContext();
-        textView = getView().findViewById(R.id.localNewsNoUser);
-        mainRecyclerView = getView().findViewById(R.id.mainRecyclerView);
+        textView = getView().findViewById(R.id.announcementsNoUser);
+        mainRecyclerView = getView().findViewById(R.id.announcementsRV);
         loadingIV = getView().findViewById(R.id.annLoadingIV);
 
     }
@@ -73,8 +73,6 @@ public class AnnouncementsFragment extends Fragment {
         ArrayList<Announcement> anns = new ArrayList<>(0);
         @Override
         protected String doInBackground(Void... voids) {
-
-
             return "Executed";
         }
 

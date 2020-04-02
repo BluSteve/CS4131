@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:text="TextView"
+                android:background="?attr/selectableItemBackground"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 

@@ -7,6 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
+    <string name="action_stageMode">Stage Mode</string>
 
     <string name="menu_announcements">Announcements</string>
     <string name="menu_events">Events</string>
@@ -31,6 +32,9 @@
     <string name="nameHint">Full name</string>
 
     <string name="noUser">Please log-in to use this feature.</string>
+
+    <string name="shareBtn">SHARE</string>
+
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->

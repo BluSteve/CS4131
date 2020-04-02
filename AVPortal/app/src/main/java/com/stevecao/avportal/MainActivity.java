@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton darkModeBtn;
     LinearLayout navLL;
     Toolbar toolbar;
+    NavController navController;
     private AppBarConfiguration mAppBarConfiguration;
 
     private void updateViews() {
@@ -74,20 +75,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener((item) -> {
-            Log.d("ddd", "ddd");
-            switch (item.getItemId()) {
-                case R.id.action_settings:
-                    Intent intent = new Intent(this, SettingsActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.action_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(this, "Sign-out successful!", Toast.LENGTH_SHORT).show();
-                    updateViews();
-            }
-            return false;
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -141,7 +129,29 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        toolbar.setOnMenuItemClickListener((item) -> {
+            Log.d("ddd", "ddd");
+            switch (item.getItemId()) {
+                case R.id.action_settings:
+                    Intent intent = new Intent(this, SettingsActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.action_logout:
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(this, "Sign-out successful!", Toast.LENGTH_SHORT).show();
+                    finish();
+                    getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(getIntent());
+                    updateViews();
+                    break;
+                case R.id.action_stageMode:
+                    //TODO add stageMode
+            }
+            return false;
+        });
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
