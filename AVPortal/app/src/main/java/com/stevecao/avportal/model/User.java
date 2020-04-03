@@ -1,23 +1,16 @@
 package com.stevecao.avportal.model;
 
 public class User {
-    String name, number, email, role;
+    String name, number, email;
 
 
-    public User(String name, String number, String email, String role) {
+    public User(String name, String number, String email) {
         this.name = name;
         this.number = number;
         this.email = email;
-        this.role = role;
     }
 
-    public String getRole() {
-        return role;
-    }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public String getName() {
         return name;

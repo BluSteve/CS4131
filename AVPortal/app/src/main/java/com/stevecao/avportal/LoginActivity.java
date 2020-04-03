@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences prefs = this.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
-        if (prefs.getBoolean("com.stevecao.avportal.darkmode", true))
+        if (prefs.getBoolean("com.stevecao.avportal.darkMode", true))
             setTheme(R.style.AppThemeDark);
         else setTheme(R.style.AppThemeLight);
         setContentView(R.layout.activity_login);
@@ -70,12 +70,12 @@ public class LoginActivity extends AppCompatActivity {
                                                     DocumentSnapshot chosenUser = task2.getDocuments().get(0);
                                                     prefs.edit().putString("name", chosenUser.get("name").toString()).apply();
                                                     if (chosenUser.getBoolean("isAdmin")) {
-                                                        prefs.edit().putBoolean("isAdmin", true).apply();
+                                                        prefs.edit().putBoolean("com.stevecao.avportal.isAdmin", true).apply();
                                                         loginLoadingIV.setVisibility(View.GONE);
                                                         Toast.makeText(LoginActivity.this, "Admin login successful!", Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                                     } else {
-                                                        prefs.edit().putBoolean("isAdmin", false).apply();
+                                                        prefs.edit().putBoolean("com.stevecao.avportal.isAdmin", false).apply();
                                                         loginLoadingIV.setVisibility(View.GONE);
                                                         Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));

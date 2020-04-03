@@ -34,10 +34,19 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class EventsFragment extends Fragment {
+    private static HashMap<String, String> userEvents = new HashMap<>(0);
     RecyclerView mainRecyclerView;
     ImageView loadingIV;
     TextView textView;
     Context mContext;
+
+    public static HashMap<String, String> getUserEvents() {
+        return userEvents;
+    }
+
+    public static void setUserEvents(HashMap<String, String> userEvents) {
+        EventsFragment.userEvents = userEvents;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -93,57 +102,69 @@ public class EventsFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("events")
+            db.collection("users")
+                    .whereEqualTo("email", FirebaseAuth.getInstance().getCurrentUser().getEmail())
                     .get()
-                    .addOnSuccessListener((task) -> {
-                        try {
-                            for (DocumentSnapshot document : task.getDocuments()) {
-                                Log.d("doc", document.toString());
-                                User teacherIc;
-                                HashMap<Equipment, Long> equiNeeded = new HashMap<>(0);
-                                String name, desc, location, id;
-                                ArrayList<URL> imageUrls = new ArrayList<>(0);
-                                HashMap<String, String> teacherIcMap = (HashMap<String, String>) document.get("teacherIc");
-                                HashMap<String, Object> equiNeededMap = (HashMap<String, Object>) document.get("equiNeeded");
-                                long manpower;
-                                ArrayList<Date> dates = new ArrayList<>(0);
-                                teacherIc = new User(teacherIcMap.get("name"), teacherIcMap.get("number"),
-                                        teacherIcMap.get("email"), "teacherIc");
-
-                                ArrayList<String> equiNeededMapKeys = new ArrayList<>(equiNeededMap.keySet());
-                                for (int x = 0; x < equiNeededMap.size(); x++) {
-                                    String key = equiNeededMapKeys.get(x);
-                                    equiNeeded.put(new Equipment(key
-                                            .split("\\|")[0],
-                                            key.split("\\|")[1]),
-                                            (long) equiNeededMap.get(key));
-                                }
-                                for (String s: (ArrayList<String>) document.get("imageUrls")) {
-                                    imageUrls.add(new URL(s));
-                                }
-                                for (Timestamp t: (ArrayList<Timestamp>) document.get("dates")) {
-                                    dates.add(t.toDate());
-                                }
-                                name = document.get("name").toString();
-                                desc = document.get("desc").toString();
-                                location = document.get("location").toString();
-                                id = document.getId();
-                                manpower = (long) document.get("manpower");
-
-                                Event event = new Event(teacherIc, name, desc, location, id,
-                                        imageUrls, dates, equiNeeded, manpower);
-                                events.add(event);
-                            }
-
-                            eventAdapter = new EventAdapter(mContext, events);
-                            Log.d("events", events.toString());
-                            mainRecyclerView.setAdapter(eventAdapter);
-                            loadingIV.setVisibility(View.GONE);
-                            mainRecyclerView.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .addOnCompleteListener((task) -> {
+                        if (task.isSuccessful()) {
+                            HashMap<String, String> queriedEvents = (HashMap<String, String>)
+                                    task.getResult().getDocuments().get(0).get("events");
+                            if (queriedEvents != null)
+                                userEvents = queriedEvents;
                         }
+                        db.collection("events")
+                                .get()
+                                .addOnSuccessListener((task2) -> {
+                                    try {
+                                        for (DocumentSnapshot document : task2.getDocuments()) {
+                                            Log.d("doc", document.toString());
+                                            User teacherIc;
+                                            HashMap<Equipment, Long> equiNeeded = new HashMap<>(0);
+                                            String name, desc, location, id;
+                                            ArrayList<URL> imageUrls = new ArrayList<>(0);
+                                            HashMap<String, String> teacherIcMap = (HashMap<String, String>) document.get("teacherIc");
+                                            HashMap<String, Object> equiNeededMap = (HashMap<String, Object>) document.get("equiNeeded");
+                                            long manpower;
+                                            ArrayList<Date> dates = new ArrayList<>(0);
+                                            teacherIc = new User(teacherIcMap.get("name"), teacherIcMap.get("number"),
+                                                    teacherIcMap.get("email"));
+
+                                            ArrayList<String> equiNeededMapKeys = new ArrayList<>(equiNeededMap.keySet());
+                                            for (int x = 0; x < equiNeededMap.size(); x++) {
+                                                String key = equiNeededMapKeys.get(x);
+                                                equiNeeded.put(new Equipment(key
+                                                                .split("\\|")[0],
+                                                                key.split("\\|")[1]),
+                                                        (long) equiNeededMap.get(key));
+                                            }
+                                            for (String s : (ArrayList<String>) document.get("imageUrls")) {
+                                                imageUrls.add(new URL(s));
+                                            }
+                                            for (Timestamp t : (ArrayList<Timestamp>) document.get("dates")) {
+                                                dates.add(t.toDate());
+                                            }
+                                            name = document.get("name").toString();
+                                            desc = document.get("desc").toString();
+                                            location = document.get("location").toString();
+                                            id = document.getId();
+                                            manpower = (long) document.get("manpower");
+
+                                            Event event = new Event(teacherIc, name, desc, location, id,
+                                                    imageUrls, dates, equiNeeded, manpower);
+                                            events.add(event);
+                                        }
+
+                                        eventAdapter = new EventAdapter(mContext, events);
+                                        Log.d("events", events.toString());
+                                        mainRecyclerView.setAdapter(eventAdapter);
+                                        loadingIV.setVisibility(View.GONE);
+                                        mainRecyclerView.setVisibility(View.VISIBLE);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                });
                     });
+
         }
     }
 }

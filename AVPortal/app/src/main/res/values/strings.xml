@@ -30,12 +30,20 @@
     <string name="emailHint">NUSH email</string>
     <string name="passwordHint">Password</string>
     <string name="nameHint">Full name</string>
+    <string name="phoneHint">Phone number</string>
+
+    <string name="pending">Pending</string>
+    <string name="approved">Approved!</string>
 
     <string name="noUser">Please log-in to use this feature.</string>
 
     <string name="shareBtn">SHARE</string>
     <string name="shareImage">Share Image</string>
     <string name="addToCal">Add to Calendar</string>
+    <string name="signUpConfirm">Are you sure you want to sign up for</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="title_activity_settings">Settings</string>
 
