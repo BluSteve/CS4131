@@ -5,7 +5,7 @@
     android:id="@+id/announcementsCL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.EventsFragment">
+    tools:context=".fragment.AnnouncementsFragment">
 
     <TextView
         android:id="@+id/announcementsNoUser"

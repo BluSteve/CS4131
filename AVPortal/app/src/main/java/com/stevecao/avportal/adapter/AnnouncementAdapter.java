@@ -3,7 +3,10 @@ package com.stevecao.avportal.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
@@ -17,14 +20,23 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.model.Announcement;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.SimpleTimeZone;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.MyViewHolder> {
     private Context mContext;
@@ -77,16 +89,28 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
             ppImageView.setOnLongClickListener((s3) -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Share Post");
-                builder.setPositiveButton(mContext.getString(R.string.shareBtn),
+                builder.setTitle(mContext.getString(R.string.shareImage));
+                builder.setPositiveButton(mContext.getString(R.string.shareImage),
                         (dialog, which) -> {
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(ann.getImageUrl().toString()));
-                            sendIntent.setType("image/jpg");
+                            Glide.with(mContext).
+                                    asBitmap()
+                                    .load(ann.getImageUrl())
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource,
+                                                                    @Nullable Transition<? super Bitmap> transition) {
+                                            Intent sendIntent = new Intent();
+                                            sendIntent.setAction(Intent.ACTION_SEND);
+                                            sendIntent.putExtra(Intent.EXTRA_STREAM,
+                                                    getLocalBitmapUri(resource));
+                                            sendIntent.setType("image/*");
 
-                            Intent shareIntent = Intent.createChooser(sendIntent, null);
-                            mContext.startActivity(shareIntent);
+                                            Intent shareIntent = Intent.createChooser(sendIntent,
+                                                    mContext.getString(R.string.shareImage));
+                                            mContext.startActivity(shareIntent);
+                                        }
+                                    });
+
 
                         });
                 AlertDialog alertDialog = builder.create();
@@ -103,9 +127,32 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         });
     }
 
+    public Uri getLocalBitmapUri(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "share_image_" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.parse(file.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
     @Override
     public int getItemCount() {
         return anns.size();
+    }
+
+    public ArrayList<Announcement> getAnns() {
+        return anns;
+    }
+
+    public void setAnns(ArrayList<Announcement> anns) {
+        this.anns = anns;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -121,13 +168,5 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             imageView = view.findViewById(R.id.imageView);
             cardView = view.findViewById(R.id.cardView);
         }
-    }
-
-    public ArrayList<Announcement> getAnns() {
-        return anns;
-    }
-
-    public void setAnns(ArrayList<Announcement> anns) {
-        this.anns = anns;
     }
 }

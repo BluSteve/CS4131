@@ -113,7 +113,7 @@ public class AnnouncementsFragment extends Fragment {
                             }
 
                             annAdapter = new AnnouncementAdapter(mContext, anns);
-                            Log.d("ann", annAdapter.getAnns().toString());
+
                             mainRecyclerView.setAdapter(annAdapter);
                             loadingIV.setVisibility(View.GONE);
                             mainRecyclerView.setVisibility(View.VISIBLE);

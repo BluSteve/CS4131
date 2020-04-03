@@ -72,6 +72,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                                             HashMap<String, Object> hashMap = new HashMap<>();
                                             hashMap.put("isAdmin", false);
+                                            hashMap.put("isCrew", false);
+                                            hashMap.put("role", "teacherIc");
                                             hashMap.put("name", name);
                                             hashMap.put("email", email);
                                             FirebaseFirestore.getInstance().collection("users")

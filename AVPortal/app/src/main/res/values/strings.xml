@@ -34,6 +34,8 @@
     <string name="noUser">Please log-in to use this feature.</string>
 
     <string name="shareBtn">SHARE</string>
+    <string name="shareImage">Share Image</string>
+    <string name="addToCal">Add to Calendar</string>
 
     <string name="title_activity_settings">Settings</string>
 

@@ -22,14 +22,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.stevecao.avportal.R;
-import com.stevecao.avportal.adapter.AnnouncementAdapter;
-import com.stevecao.avportal.model.Announcement;
+import com.stevecao.avportal.adapter.EventAdapter;
+import com.stevecao.avportal.model.Equipment;
+import com.stevecao.avportal.model.Event;
+import com.stevecao.avportal.model.User;
 
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class EventsFragment extends Fragment {
     RecyclerView mainRecyclerView;
@@ -40,7 +42,7 @@ public class EventsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.d("ann", "created");
-        View root = inflater.inflate(R.layout.fragment_announcements, container, false);
+        View root = inflater.inflate(R.layout.fragment_events, container, false);
         return root;
     }
 
@@ -48,9 +50,9 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         mContext = view.getContext();
-        textView = getView().findViewById(R.id.announcementsNoUser);
-        mainRecyclerView = getView().findViewById(R.id.announcementsRV);
-        loadingIV = getView().findViewById(R.id.annLoadingIV);
+        textView = getView().findViewById(R.id.eventsNoUser);
+        mainRecyclerView = getView().findViewById(R.id.eventsRV);
+        loadingIV = getView().findViewById(R.id.eventsLoadingIV);
 
     }
 
@@ -62,15 +64,15 @@ public class EventsFragment extends Fragment {
             mainRecyclerView.setVisibility(View.GONE);
             loadingIV.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
-        }
-        else {
-            (new UpdateNews()).execute();
+        } else {
+            (new UpdateEvents()).execute();
         }
     }
 
-    private final class UpdateNews extends AsyncTask<Void, Void, String> {
-        AnnouncementAdapter annAdapter;
-        ArrayList<Announcement> anns = new ArrayList<>(0);
+    private final class UpdateEvents extends AsyncTask<Void, Void, String> {
+        EventAdapter eventAdapter;
+        ArrayList<Event> events = new ArrayList<>(0);
+
         @Override
         protected String doInBackground(Void... voids) {
             return "Executed";
@@ -91,30 +93,51 @@ public class EventsFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("announcements")
+            db.collection("events")
                     .get()
                     .addOnSuccessListener((task) -> {
                         try {
                             for (DocumentSnapshot document : task.getDocuments()) {
-                                String authorName, authorEmail, title, content;
-                                URL url, imageUrl;
-                                Date datePublished = ((Timestamp) document.get("datePublished"))
-                                        .toDate();
-                                authorName = document.get("authorName").toString();
-                                authorEmail = document.get("authorEmail").toString();
-                                title = WordUtils.capitalize(document.get("title").toString());
-                                content = document.get("content").toString();
-                                url = new URL(document.get("url").toString());
-                                imageUrl = new URL(document.get("imageUrl").toString());
+                                Log.d("doc", document.toString());
+                                User teacherIc;
+                                HashMap<Equipment, Long> equiNeeded = new HashMap<>(0);
+                                String name, desc, location, id;
+                                ArrayList<URL> imageUrls = new ArrayList<>(0);
+                                HashMap<String, String> teacherIcMap = (HashMap<String, String>) document.get("teacherIc");
+                                HashMap<String, Object> equiNeededMap = (HashMap<String, Object>) document.get("equiNeeded");
+                                long manpower;
+                                ArrayList<Date> dates = new ArrayList<>(0);
+                                teacherIc = new User(teacherIcMap.get("name"), teacherIcMap.get("number"),
+                                        teacherIcMap.get("email"), "teacherIc");
 
-                                Announcement ann = new Announcement(authorName, authorEmail, title,
-                                        content, url, imageUrl, datePublished);
-                                anns.add(ann);
+                                ArrayList<String> equiNeededMapKeys = new ArrayList<>(equiNeededMap.keySet());
+                                for (int x = 0; x < equiNeededMap.size(); x++) {
+                                    String key = equiNeededMapKeys.get(x);
+                                    equiNeeded.put(new Equipment(key
+                                            .split("\\|")[0],
+                                            key.split("\\|")[1]),
+                                            (long) equiNeededMap.get(key));
+                                }
+                                for (String s: (ArrayList<String>) document.get("imageUrls")) {
+                                    imageUrls.add(new URL(s));
+                                }
+                                for (Timestamp t: (ArrayList<Timestamp>) document.get("dates")) {
+                                    dates.add(t.toDate());
+                                }
+                                name = document.get("name").toString();
+                                desc = document.get("desc").toString();
+                                location = document.get("location").toString();
+                                id = document.getId();
+                                manpower = (long) document.get("manpower");
+
+                                Event event = new Event(teacherIc, name, desc, location, id,
+                                        imageUrls, dates, equiNeeded, manpower);
+                                events.add(event);
                             }
 
-                            annAdapter = new AnnouncementAdapter(mContext, anns);
-                            Log.d("ann", annAdapter.getAnns().toString());
-                            mainRecyclerView.setAdapter(annAdapter);
+                            eventAdapter = new EventAdapter(mContext, events);
+                            Log.d("events", events.toString());
+                            mainRecyclerView.setAdapter(eventAdapter);
                             loadingIV.setVisibility(View.GONE);
                             mainRecyclerView.setVisibility(View.VISIBLE);
                         } catch (Exception e) {
