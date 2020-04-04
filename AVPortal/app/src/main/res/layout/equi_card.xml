@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/eventCV"
+        android:id="@+id/equiCV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
@@ -20,17 +20,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/doubleTick"
+            <ImageButton
+                android:id="@+id/equiEditBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="12dp"
                 android:layout_marginBottom="12dp"
-                android:tint="#868686"
+                android:tint="#FFFFFF"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_double_tick_indicator" />
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 app:cardCornerRadius="8dp">
 
                 <ImageView
-                    android:id="@+id/eventIV"
+                    android:id="@+id/equiIV"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     app:srcCompat="@drawable/av" />
@@ -60,15 +60,21 @@
                 android:paddingBottom="20dp">
 
                 <TextView
-                    android:id="@+id/eventTitleTV"
+                    android:id="@+id/equiNameTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     android:text="TextView"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/eventSourceTV"
+                    android:id="@+id/equiQuantityTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
@@ -76,7 +82,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/eventDateTV"
+                    android:id="@+id/equiCostTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"

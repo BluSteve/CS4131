@@ -1,24 +1,33 @@
 package com.stevecao.avportal.model;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Equipment {
-    private String brand, name, desc;
-    private long cost, count;
-    private URL imageUrl;
+    private String brand, name, desc, id;
+    private long cost, quantity;
+    private URL mainImageUrl;
+    private ArrayList<URL> imageUrls;
 
     public Equipment(String brand, String name) {
         this.brand = brand;
         this.name = name;
     }
 
-    public Equipment(String brand, String name, String desc, long cost, long count, URL imageUrl) {
+    public Equipment(String brand, String name, String desc, long cost, long quantity, ArrayList<URL> imageUrls,
+                     String id) {
         this.brand = brand;
         this.name = name;
         this.desc = desc;
         this.cost = cost;
-        this.count = count;
-        this.imageUrl = imageUrl;
+        this.quantity = quantity;
+        this.mainImageUrl = imageUrls.get(0);
+        this.imageUrls = imageUrls;
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return brand + " - " + name;
     }
 
     public String getBrand() {
@@ -53,20 +62,36 @@ public class Equipment {
         this.cost = cost;
     }
 
-    public long getCount() {
-        return count;
+    public long getQuantity() {
+        return quantity;
     }
 
-    public void setCount(long count) {
-        this.count = count;
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
     }
 
-    public URL getImageUrl() {
-        return imageUrl;
+    public URL getMainImageUrl() {
+        return mainImageUrl;
     }
 
-    public void setImageUrl(URL imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setMainImageUrl(URL mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ArrayList<URL> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(ArrayList<URL> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     @Override
@@ -76,8 +101,9 @@ public class Equipment {
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
                 ", cost=" + cost +
-                ", count=" + count +
-                ", imageUrl=" + imageUrl +
+                ", quantity=" + quantity +
+                ", mainImageUrl=" + mainImageUrl +
+                ", imageUrls=" + imageUrls +
                 '}';
     }
 }

@@ -50,7 +50,6 @@ public class EventsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        Log.d("ann", "created");
         View root = inflater.inflate(R.layout.fragment_events, container, false);
         return root;
     }

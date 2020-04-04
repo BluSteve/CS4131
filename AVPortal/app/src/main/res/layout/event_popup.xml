@@ -25,7 +25,9 @@
         android:layout_height="match_parent"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/eventPpVP"
@@ -33,7 +35,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="10dp" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="210dp">
@@ -87,35 +89,99 @@
                     android:lineSpacingMultiplier="1.2"
                     android:text="TextView" />
 
-                <ListView
-                    android:id="@+id/eventPpReheLV"
+                <com.github.florent37.expansionpanel.ExpansionHeader
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="40dp"
                     android:layout_marginHorizontal="15dp"
+                    app:expansion_headerIndicator="@id/headerIndicator"
+                    app:expansion_layout="@id/expansionLayout"
+                    app:expansion_toggleOnClick="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/addInfo"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/headerIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginLeft="16dp"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+                </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                <com.github.florent37.expansionpanel.ExpansionLayout
+                    android:id="@+id/expansionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/eventPpReheLV"
+                            android:layout_width="match_parent"
+                            android:layout_height="140dp"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border">
+
+                        </ListView>
+
+                        <ListView
+                            android:id="@+id/eventPpEquiLV"
+                            android:layout_width="match_parent"
+                            android:layout_height="140dp"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/border">
+
+                        </ListView>
+
+                    </LinearLayout>
+                </com.github.florent37.expansionpanel.ExpansionLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/border" />
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/darker_gray" />
 
-                <ListView
-                    android:id="@+id/eventPpEquiLV"
+                <TextView
+                    android:id="@+id/eventPpApplTV"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/border" >
+                    android:text="@string/applications"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
-                </ListView>
-
-                <ListView
-                    android:id="@+id/eventPpAdminLV"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/eventAdminSRL"
                     android:layout_width="match_parent"
                     android:layout_height="280dp"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/border"
-                    android:visibility="gone">
+                    android:layout_marginHorizontal="15dp">
 
-                </ListView>
+                    <ListView
+                        android:id="@+id/eventPpAdminLV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/border"
+                        android:visibility="gone" />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
                 <Button
                     android:id="@+id/eventPpSignUpBtn"
@@ -123,10 +189,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="50dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@string/signUpBtn" />
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.cardview.widget.CardView>
 
