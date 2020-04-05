@@ -65,6 +65,17 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.MyVi
         return new MyViewHolder(itemView);
     }
 
+    public void deleteItem(int position) {
+        Equipment toDelete = equis.get(position);
+        equis.remove(position);
+        FirebaseFirestore.getInstance().collection("equipment")
+                .document(toDelete.getId())
+                .delete()
+                .addOnSuccessListener((task) -> {
+                    Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
+                    notifyItemRemoved(position);
+                });
+    }
     @Override
     public void onBindViewHolder(@NonNull EquipmentAdapter.MyViewHolder holder, int position) {
         Equipment equi = equis.get(position);
@@ -83,7 +94,6 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.MyVi
         if (isAdmin) holder.editBtn.setVisibility(View.VISIBLE);
 
 
-        // TODO delete equipment
         holder.editBtn.setOnClickListener((s) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle(mContext.getString(R.string.editEquiQuantity));

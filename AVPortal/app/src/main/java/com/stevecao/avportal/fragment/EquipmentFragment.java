@@ -1,6 +1,11 @@
 package com.stevecao.avportal.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -90,7 +96,6 @@ public class EquipmentFragment extends Fragment {
         });
         srl.setOnRefreshListener(() -> {
             updateEqui("", "");
-
         });
     }
 
@@ -140,7 +145,7 @@ public class EquipmentFragment extends Fragment {
                             if (isSearched) {
                                 if (!searchTerm.equals("")) {
                                     ArrayList<Equipment> temp = new ArrayList<>(0);
-                                    for (Equipment e: equis) {
+                                    for (Equipment e : equis) {
                                         String s = (e.getFullName()).toLowerCase();
                                         if (s.contains(searchTerm.toLowerCase()))
                                             temp.add(e);
@@ -169,6 +174,51 @@ public class EquipmentFragment extends Fragment {
                             equiAdapter = new EquipmentAdapter(mContext, equis);
                             Log.d("events", equis.toString());
                             mainRecyclerView.setAdapter(equiAdapter);
+                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                                @Override
+                                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                    return false;
+                                }
+
+                                @Override
+                                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                    builder.setTitle(mContext.getString(R.string.deleteConfirm));
+                                    builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
+                                        equiAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                    });
+                                    builder.show();
+                                }
+
+                                @Override
+                                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                                    super.onChildDraw(c, recyclerView, viewHolder, dX,
+                                            dY, actionState, isCurrentlyActive);
+                                    View itemView = viewHolder.itemView;
+                                    int backgroundCornerOffset = 100;
+                                    Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
+                                    ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+
+                                    int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                    int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                    int iconBottom = iconTop + icon.getIntrinsicHeight();
+                                    if (dX < 0) { // Swiping to the left
+                                        int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+                                        int iconRight = itemView.getRight() - iconMargin;
+                                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                                        background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                                                itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
+                                    } else { // view is unSwiped
+                                        background.setBounds(0, 0, 0, 0);
+                                    }
+
+                                    background.draw(c);
+                                    icon.draw(c);
+                                }
+                            });
+                            itemTouchHelper.attachToRecyclerView(mainRecyclerView);
                             loadingIV.setVisibility(View.GONE);
                             equiView.setVisibility(View.VISIBLE);
                             mainRecyclerView.setVisibility(View.VISIBLE);

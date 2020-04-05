@@ -41,10 +41,14 @@
 
     <string name="shareBtn">SHARE</string>
     <string name="shareImage">Share Image</string>
+    <string name="addImage">ADD IMAGE</string>
+    <string name="newAnn">Add new announcement</string>
+    <string name="addBtn">ADD</string>
     <string name="addToCal">Add to Calendar</string>
     <string name="signUpConfirm">Are you sure you want to sign up for</string>
     <string name="approvalConfirm">Change allocation status</string>
     <string name="editEquiQuantity">Change equipment quantity</string>
+    <string name="deleteConfirm">Delete equipment?</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -65,6 +69,10 @@
         <item>Quantity - Asc.</item>
         <item>Quantity - Desc.</item>
     </string-array>
+
+    <string name="annInputTitle">Title</string>
+    <string name="annInputContent">Content</string>
+    <string name="annInputUrl">URL (optional)</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

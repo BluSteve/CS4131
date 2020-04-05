@@ -71,7 +71,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     public void refreshAdmin(Event event) {
         ppSignUpBtn.setVisibility(View.GONE);
         ppAdminLV.setVisibility(View.VISIBLE);
-        ppApplTV.setVisibility(View.VISIBLE);
 
         // Get list of applications from Firebase
         FirebaseFirestore.getInstance().collection("users")
@@ -104,80 +103,73 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                     }
 
                     // Admin ListView initialization
-                    ArrayAdapter<String> adminAdapter = new ArrayAdapter<String>(mContext,
-                            android.R.layout.simple_list_item_1, new ArrayList<String>() {{
-                        add("A");
-                        add("B");
-                        add("C");add("A");
-                        add("B");
-                        add("C");add("A");
-                        add("B");
-                        add("C");add("A");
-                        add("B");
-                        add("C");add("A");
-                        add("B");
-                        add("C");add("A");
-                        add("B");
-                        add("C");
-                    }});
-                    ppAdminLV.setAdapter(adminAdapter);
-                    // TODO fix scrolling
-//                    ppAdminLV.setOnItemClickListener((parent, view, position2, id) -> {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                        builder.setTitle(mContext.getString(R.string.approvalConfirm));
-//                        String oriStatus = appsString.get(position2).split(" - ")[1];
-//                        String crewId = idAppsString.get(position2);
-//                        if (oriStatus.equals(mContext.getString(R.string.pending))) {
-//                            builder.setPositiveButton(mContext.getString(R.string.approve), (dialog, which) -> {
-//                                ppLoadingIV.bringToFront();
-//                                ppLoadingIV.setVisibility(View.VISIBLE);
-//                                FirebaseFirestore.getInstance().collection("users")
-//                                        .document(crewId)
-//                                        .get()
-//                                        .addOnSuccessListener((task2) -> {
-//                                            HashMap<String, String> hashMap = (HashMap<String, String>) task2.get("events");
-//                                            hashMap.put(event.getId(), "approved");
-//                                            HashMap<String, Object> toMerge = new HashMap<>(0);
-//                                            toMerge.put("events", hashMap);
-//                                            FirebaseFirestore.getInstance().collection("users")
-//                                                    .document(crewId)
-//                                                    .set(toMerge, SetOptions.merge())
-//                                                    .addOnSuccessListener((task3) -> {
-//                                                        ppLoadingIV.setVisibility(View.GONE);
-//                                                        Toast.makeText(mContext, "Status changed, refresh to see changes", Toast.LENGTH_SHORT).show();
-//                                                    });
-//                                        });
-//
-//                            });
-//                        } else if (oriStatus.equals(mContext.getString(R.string.approved))) {
-//                            builder.setPositiveButton(mContext.getString(R.string.disapprove), (dialog, which) -> {
-//                                ppLoadingIV.bringToFront();
-//                                ppLoadingIV.setVisibility(View.VISIBLE);
-//                                FirebaseFirestore.getInstance().collection("users")
-//                                        .document(crewId)
-//                                        .get()
-//                                        .addOnSuccessListener((task2) -> {
-//                                            HashMap<String, String> hashMap = (HashMap<String, String>) task2.get("events");
-//                                            hashMap.put(event.getId(), "pending");
-//                                            HashMap<String, Object> toMerge = new HashMap<>(0);
-//                                            toMerge.put("events", hashMap);
-//                                            FirebaseFirestore.getInstance().collection("users")
-//                                                    .document(crewId)
-//                                                    .set(toMerge, SetOptions.merge())
-//                                                    .addOnSuccessListener((task3) -> {
-//                                                        ppLoadingIV.setVisibility(View.GONE);
-//                                                        Toast.makeText(mContext, "Status changed, refresh to see changes", Toast.LENGTH_SHORT).show();
-//                                                    });
-//                                        });
-//
-//                            });
-//
-//                        }
-//
-//                        AlertDialog alertDialog = builder.create();
-//                        alertDialog.show();
-//                    });
+                    if (appsString.size() == 0)
+                        ppApplTV.setVisibility(View.GONE);
+                    else {
+                        ppApplTV.setVisibility(View.VISIBLE);
+                        ArrayAdapter<String> adminAdapter = new ArrayAdapter<String>(mContext,
+                                android.R.layout.simple_list_item_1, appsString);
+                        ppAdminLV.setAdapter(adminAdapter);
+                        ppAdminLV.setOnItemClickListener((parent, view, position2, id) -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                            builder.setTitle(mContext.getString(R.string.approvalConfirm));
+                            String oriStatus = appsString.get(position2).split(" - ")[1];
+                            String crewId = idAppsString.get(position2);
+                            if (oriStatus.equals(mContext.getString(R.string.pending))) {
+                                builder.setPositiveButton(mContext.getString(R.string.approve), (dialog, which) -> {
+                                    ppLoadingIV.bringToFront();
+                                    ppLoadingIV.setVisibility(View.VISIBLE);
+                                    FirebaseFirestore.getInstance().collection("users")
+                                            .document(crewId)
+                                            .get()
+                                            .addOnSuccessListener((task2) -> {
+                                                HashMap<String, String> hashMap = (HashMap<String, String>) task2.get("events");
+                                                hashMap.put(event.getId(), "approved");
+                                                HashMap<String, Object> toMerge = new HashMap<>(0);
+                                                toMerge.put("events", hashMap);
+                                                FirebaseFirestore.getInstance().collection("users")
+                                                        .document(crewId)
+                                                        .set(toMerge, SetOptions.merge())
+                                                        .addOnSuccessListener((task3) -> {
+                                                            ppLoadingIV.setVisibility(View.GONE);
+                                                            refreshAdmin(event);
+                                                            Toast.makeText(mContext, "Status changed!", Toast.LENGTH_SHORT).show();
+                                                        });
+                                            });
+
+                                });
+                            } else if (oriStatus.equals(mContext.getString(R.string.approved))) {
+                                builder.setPositiveButton(mContext.getString(R.string.disapprove), (dialog, which) -> {
+                                    ppLoadingIV.bringToFront();
+                                    ppLoadingIV.setVisibility(View.VISIBLE);
+                                    FirebaseFirestore.getInstance().collection("users")
+                                            .document(crewId)
+                                            .get()
+                                            .addOnSuccessListener((task2) -> {
+                                                HashMap<String, String> hashMap = (HashMap<String, String>) task2.get("events");
+                                                hashMap.put(event.getId(), "pending");
+                                                HashMap<String, Object> toMerge = new HashMap<>(0);
+                                                toMerge.put("events", hashMap);
+                                                FirebaseFirestore.getInstance().collection("users")
+                                                        .document(crewId)
+                                                        .set(toMerge, SetOptions.merge())
+                                                        .addOnSuccessListener((task3) -> {
+                                                            ppLoadingIV.setVisibility(View.GONE);
+                                                            refreshAdmin(event);
+                                                            Toast.makeText(mContext, "Status changed!", Toast.LENGTH_SHORT).show();
+                                                        });
+                                            });
+
+                                });
+
+                            }
+
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        });
+                    }
                 });
+
     }
 
     @Override
@@ -207,7 +199,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                     .inflate(R.layout.event_popup, container, false);
             TextView ppTitleTV, ppTeacherIcTV, ppManpowerTV, ppContentTV;
             ListView ppReheLV, ppEquiLV;
-            SwipeRefreshLayout srl;
 
             ppLoadingIV = eventPopup.findViewById(R.id.eventPpLoadingIV);
             ppSignUpBtn = eventPopup.findViewById(R.id.eventPpSignUpBtn);
@@ -220,7 +211,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             ppEquiLV = eventPopup.findViewById(R.id.eventPpEquiLV);
             ppAdminLV = eventPopup.findViewById(R.id.eventPpAdminLV);
             ppApplTV = eventPopup.findViewById(R.id.eventPpApplTV);
-            srl = eventPopup.findViewById(R.id.eventAdminSRL);
 
             // Dates ListView initialization
             ArrayList<String> startDates = event.getStringStartDates();
@@ -334,9 +324,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             });
 
             // Admin stuff
-            srl.setOnRefreshListener(() -> {
-                refreshAdmin(event);
-            });
             Log.d("admin", String.valueOf(isAdmin));
             if (isAdmin) {
                 refreshAdmin(event);

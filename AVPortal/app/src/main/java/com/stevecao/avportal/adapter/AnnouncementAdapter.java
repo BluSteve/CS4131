@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,7 +63,9 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.titleTV.setText(ann.getTitle());
         holder.sourceTV.setText(ann.getAuthor());
         holder.dateTV.setText(ann.getStringDate());
-        Glide.with(mContext).load(ann.getImageUrl()).into(holder.imageView);
+        if (!ann.getImageUrl().toString().equals(""))
+            Glide.with(mContext).load(ann.getImageUrl()).into(holder.imageView);
+        else holder.imageView.setVisibility(View.GONE);
 
         holder.cardView.setOnClickListener((s) -> {
             View newsPopup = LayoutInflater.from(mContext)
@@ -80,43 +83,52 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             ppTitleTV.setText(annTitle);
             ppTitleTV.setMovementMethod(LinkMovementMethod.getInstance());
             ppTitleTV.setOnClickListener((s2) -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ann.getUrl().toString()));
-                mContext.startActivity(intent);
+                if (!ann.getUrl().toString().equals("")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ann.getUrl().toString()));
+                    mContext.startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "No link attached", Toast.LENGTH_SHORT).show();
+
+                }
             });
             ppSourceTV.setText(ann.getAuthor());
             ppDateTV.setText(ann.getStringDate());
             ppContentTV.setText(ann.getContent());
-            Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
-            ppImageView.setOnLongClickListener((s3) -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle(mContext.getString(R.string.shareImage));
-                builder.setPositiveButton(mContext.getString(R.string.shareImage),
-                        (dialog, which) -> {
-                            Glide.with(mContext).
-                                    asBitmap()
-                                    .load(ann.getImageUrl())
-                                    .into(new SimpleTarget<Bitmap>() {
-                                        @Override
-                                        public void onResourceReady(@NonNull Bitmap resource,
-                                                                    @Nullable Transition<? super Bitmap> transition) {
-                                            Intent sendIntent = new Intent();
-                                            sendIntent.setAction(Intent.ACTION_SEND);
-                                            sendIntent.putExtra(Intent.EXTRA_STREAM,
-                                                    getLocalBitmapUri(resource));
-                                            sendIntent.setType("image/*");
+            if (!ann.getImageUrl().toString().equals("")){
+                Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
+                ppImageView.setOnLongClickListener((s3) -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(mContext.getString(R.string.shareImage));
+                    builder.setPositiveButton(mContext.getString(R.string.shareImage),
+                            (dialog, which) -> {
+                                Glide.with(mContext).
+                                        asBitmap()
+                                        .load(ann.getImageUrl())
+                                        .into(new SimpleTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(@NonNull Bitmap resource,
+                                                                        @Nullable Transition<? super Bitmap> transition) {
+                                                Intent sendIntent = new Intent();
+                                                sendIntent.setAction(Intent.ACTION_SEND);
+                                                sendIntent.putExtra(Intent.EXTRA_STREAM,
+                                                        getLocalBitmapUri(resource));
+                                                sendIntent.setType("image/*");
 
-                                            Intent shareIntent = Intent.createChooser(sendIntent,
-                                                    mContext.getString(R.string.shareImage));
-                                            mContext.startActivity(shareIntent);
-                                        }
-                                    });
+                                                Intent shareIntent = Intent.createChooser(sendIntent,
+                                                        mContext.getString(R.string.shareImage));
+                                                mContext.startActivity(shareIntent);
+                                            }
+                                        });
 
 
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
-            });
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    return true;
+                });
+            } else {
+                ppImageView.setVisibility(View.GONE);
+            }
 
             PopupWindow popup = new PopupWindow(newsPopup,
                     LinearLayout.LayoutParams.MATCH_PARENT,

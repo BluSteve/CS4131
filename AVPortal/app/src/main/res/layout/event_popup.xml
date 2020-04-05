@@ -35,7 +35,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="10dp" />
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="210dp">
@@ -165,22 +165,15 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/eventAdminSRL"
+                <ListView
+                    android:id="@+id/eventPpAdminLV"
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:layout_marginHorizontal="15dp">
-
-                    <ListView
-                        android:id="@+id/eventPpAdminLV"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="15dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/border"
-                        android:visibility="gone" />
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/border"
+                    android:visibility="gone" />
 
 
                 <Button
@@ -193,7 +186,7 @@
                     android:text="@string/signUpBtn" />
 
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
     </androidx.cardview.widget.CardView>
 
