@@ -38,6 +38,7 @@
     <string name="approved">Approved!</string>
 
     <string name="noUser">Please log-in to use this feature.</string>
+    <string name="imageUploaded">Image uploaded</string>
 
     <string name="shareBtn">SHARE</string>
     <string name="shareImage">Share Image</string>
@@ -48,7 +49,7 @@
     <string name="signUpConfirm">Are you sure you want to sign up for</string>
     <string name="approvalConfirm">Change allocation status</string>
     <string name="editEquiQuantity">Change equipment quantity</string>
-    <string name="deleteConfirm">Delete equipment?</string>
+    <string name="deleteConfirm">Delete this?</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

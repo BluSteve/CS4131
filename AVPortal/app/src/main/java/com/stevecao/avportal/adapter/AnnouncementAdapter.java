@@ -30,8 +30,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.model.Announcement;
+import com.stevecao.avportal.model.Equipment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +58,17 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                 .inflate(R.layout.ann_card, parent, false);
         return new MyViewHolder(itemView);
     }
-
+    public void deleteItem(int position) {
+        Announcement toDelete = anns.get(position);
+        anns.remove(position);
+        FirebaseFirestore.getInstance().collection("announcements")
+                .document(toDelete.getId())
+                .delete()
+                .addOnSuccessListener((task) -> {
+                    Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
+                    notifyItemRemoved(position);
+                });
+    }
     @Override
     public void onBindViewHolder(@NonNull AnnouncementAdapter.MyViewHolder holder, int position) {
         Announcement ann = anns.get(position);

@@ -71,35 +71,32 @@ public class SignUpActivity extends AppCompatActivity {
                         nameText.setVisibility(View.GONE);
                         phoneText.setVisibility(View.GONE);
                         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
-                                new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
+                                task -> {
+                                    if (task.isSuccessful()) {
 
-                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                            hashMap.put("isAdmin", false);
-                                            hashMap.put("isCrew", false);
-                                            hashMap.put("isTeacherIc", true);
-                                            hashMap.put("name", name);
-                                            hashMap.put("email", email);
-                                            hashMap.put("number", phone);
-                                            FirebaseFirestore.getInstance().collection("users")
-                                                    .document(FirebaseAuth.getInstance().getUid())
-                                                    .set(hashMap)
-                                                    .addOnSuccessListener((task2) -> {
-                                                        loginLoadingIV.setVisibility(View.GONE);
-                                                        Toast.makeText(SignUpActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
-                                                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                                    });
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put("isAdmin", false);
+                                        hashMap.put("isCrew", false);
+                                        hashMap.put("isTeacherIc", true);
+                                        hashMap.put("name", name);
+                                        hashMap.put("email", email);
+                                        hashMap.put("number", phone);
+                                        FirebaseFirestore.getInstance().collection("users")
+                                                .document(FirebaseAuth.getInstance().getUid())
+                                                .set(hashMap)
+                                                .addOnSuccessListener((task2) -> {
+                                                    loginLoadingIV.setVisibility(View.GONE);
+                                                    Toast.makeText(SignUpActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                                });
 
-                                        } else {
-                                            loginLoadingIV.setVisibility(View.GONE);
-                                            emailText.setVisibility(View.VISIBLE);
-                                            submitBtn.setVisibility(View.VISIBLE);
-                                            nameText.setVisibility(View.VISIBLE);
-                                            passwordText.setVisibility(View.VISIBLE);
-                                            Toast.makeText(SignUpActivity.this, "Sign-up failed!", Toast.LENGTH_SHORT).show();
-                                        }
+                                    } else {
+                                        loginLoadingIV.setVisibility(View.GONE);
+                                        emailText.setVisibility(View.VISIBLE);
+                                        submitBtn.setVisibility(View.VISIBLE);
+                                        nameText.setVisibility(View.VISIBLE);
+                                        passwordText.setVisibility(View.VISIBLE);
+                                        Toast.makeText(SignUpActivity.this, "Sign-up failed!", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } else {

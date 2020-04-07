@@ -6,12 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Announcement {
-    private String title, authorName, authorEmail, content;
+    private String title, authorName, authorEmail, content, id;
     private URL url, imageUrl;
     private Date datePublished;
 
     public Announcement(String authorName, String authorEmail, String title, String content,
-                        URL url, URL imageUrl, Date datePublished) {
+                        URL url, URL imageUrl, Date datePublished, String id) {
         this.title = title;
         this.authorName = authorName;
         this.authorEmail = authorEmail;
@@ -19,6 +19,7 @@ public class Announcement {
         this.url = url;
         this.imageUrl = imageUrl;
         this.datePublished = datePublished;
+        this.id = id;
     }
 
     public String getStringDate() {
@@ -84,6 +85,14 @@ public class Announcement {
 
     public void setAuthorEmail(String authorEmail) {
         this.authorEmail = authorEmail;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
