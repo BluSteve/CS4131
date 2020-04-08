@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.fragment.EventsFragment;
+import com.stevecao.avportal.model.Announcement;
 import com.stevecao.avportal.model.Equipment;
 import com.stevecao.avportal.model.Event;
 
@@ -384,6 +385,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     @Override
     public int getItemCount() {
         return events.size();
+    }
+
+    public void deleteItem(int position) {
+        Event toDelete = events.get(position);
+        events.remove(position);
+        FirebaseFirestore.getInstance().collection("events")
+                .document(toDelete.getId())
+                .delete()
+                .addOnSuccessListener((task) -> {
+                    Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
+                    notifyItemRemoved(position);
+                });
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

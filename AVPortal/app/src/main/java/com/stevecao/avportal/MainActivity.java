@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.stevecao.avportal.model.User;
 
 import androidx.core.widget.ImageViewCompat;
 import androidx.navigation.NavController;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout navLL;
     Toolbar toolbar;
     NavController navController;
+    private static User user;
     private AppBarConfiguration mAppBarConfiguration;
 
     private void updateViews() {
@@ -64,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static User getUser() {
+        return user;
+    }
 
+    public static void setUser(User user) {
+        MainActivity.user = user;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +111,22 @@ public class MainActivity extends AppCompatActivity {
             signUpBtn.setVisibility(View.GONE);
 
             FirebaseUser cUser = FirebaseAuth.getInstance().getCurrentUser();
-            emailTV.setText(cUser.getEmail());
-            nameTV.setText(prefs.getString("com.stevecao.avportal.name", cUser.getEmail().split("@")[0]));
-            navLL.setGravity(Gravity.BOTTOM);
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(cUser.getUid())
+                    .get()
+                    .addOnSuccessListener((task) -> {
+                        user = new User(task.get("name").toString(), task.get("number").toString(),
+                                task.get("email").toString());
 
-            emailTV.setVisibility(View.VISIBLE);
-            nameTV.setVisibility(View.VISIBLE);
-            pfpIV.setVisibility(View.VISIBLE);
+                        emailTV.setText(cUser.getEmail());
+                        nameTV.setText(user.getName());
+                        navLL.setGravity(Gravity.BOTTOM);
+
+                        emailTV.setVisibility(View.VISIBLE);
+                        nameTV.setVisibility(View.VISIBLE);
+                        pfpIV.setVisibility(View.VISIBLE);
+                    });
         } else {
             updateViews();
         }
@@ -128,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment)
+                R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment, R.id.nav_lights)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);

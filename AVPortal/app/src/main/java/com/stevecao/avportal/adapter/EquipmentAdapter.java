@@ -104,7 +104,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.MyVi
             builder.setPositiveButton("OK", (dialog, which) -> {
                 String enteredQuan = input.getText().toString();
                 try {
-                    if (enteredQuan.equals(""))
+                    if (enteredQuan.equals("") || Long.parseLong(enteredQuan) < 1)
                         Toast.makeText(mContext, "Please enter valid values!", Toast.LENGTH_SHORT).show();
                     else{
                         FirebaseFirestore.getInstance().collection("equipment")

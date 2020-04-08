@@ -9,8 +9,7 @@
         android:id="@+id/nav_announcements"
         android:name="com.stevecao.avportal.fragment.AnnouncementsFragment"
         android:label="@string/menu_announcements"
-        tools:layout="@layout/fragment_announcements">
-    </fragment>
+        tools:layout="@layout/fragment_announcements"/>
     <fragment
         android:id="@+id/nav_events"
         android:name="com.stevecao.avportal.fragment.EventsFragment"
@@ -22,4 +21,9 @@
         android:name="com.stevecao.avportal.fragment.EquipmentFragment"
         android:label="@string/menu_equipment"
         tools:layout="@layout/fragment_equipment" />
+    <fragment
+        android:id="@+id/nav_lights"
+        android:name="com.stevecao.avportal.fragment.LightsFragment"
+        android:label="@string/menu_lights"
+        tools:layout="@layout/fragment_lights" />
 </navigation>

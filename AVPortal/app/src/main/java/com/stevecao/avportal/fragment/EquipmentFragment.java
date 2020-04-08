@@ -2,6 +2,7 @@ package com.stevecao.avportal.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -51,7 +52,10 @@ public class EquipmentFragment extends Fragment {
     Context mContext;
     EquipmentAdapter equiAdapter;
     View equiView;
+    SharedPreferences prefs;
     String selectedSort = "";
+    boolean isAdmin;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +79,8 @@ public class EquipmentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        prefs = mContext.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
+        isAdmin = prefs.getBoolean("com.stevecao.avportal.isAdmin", false);
         updateEqui("", "");
 
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -174,51 +180,56 @@ public class EquipmentFragment extends Fragment {
                             equiAdapter = new EquipmentAdapter(mContext, equis);
                             Log.d("events", equis.toString());
                             mainRecyclerView.setAdapter(equiAdapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                                @Override
-                                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                                    return false;
-                                }
-
-                                @Override
-                                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                    builder.setTitle(mContext.getString(R.string.deleteConfirm));
-                                    builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
-                                        equiAdapter.deleteItem(viewHolder.getAdapterPosition());
-                                    });
-                                    builder.show();
-                                }
-
-                                @Override
-                                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                                    super.onChildDraw(c, recyclerView, viewHolder, dX,
-                                            dY, actionState, isCurrentlyActive);
-                                    View itemView = viewHolder.itemView;
-                                    int backgroundCornerOffset = 100;
-                                    Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
-                                    ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
-
-                                    int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                                    int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                                    int iconBottom = iconTop + icon.getIntrinsicHeight();
-                                    if (dX < 0) { // Swiping to the left
-                                        int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
-                                        int iconRight = itemView.getRight() - iconMargin;
-                                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                                        background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-                                                itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
-                                    } else { // view is unSwiped
-                                        background.setBounds(0, 0, 0, 0);
+                            if (isAdmin) {
+                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                                    @Override
+                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                        return false;
                                     }
 
-                                    background.draw(c);
-                                    icon.draw(c);
-                                }
-                            });
-                            itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+                                    @Override
+                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                        builder.setTitle(mContext.getString(R.string.deleteConfirm));
+                                        builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
+                                            equiAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                        });
+                                        builder.setNegativeButton(getString(R.string.no), (dialog, which) -> {
+                                            updateEqui(searchTerm, sortTerm);
+                                        });
+                                        builder.show();
+                                    }
+
+                                    @Override
+                                    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                                        super.onChildDraw(c, recyclerView, viewHolder, dX,
+                                                dY, actionState, isCurrentlyActive);
+                                        View itemView = viewHolder.itemView;
+                                        int backgroundCornerOffset = 100;
+                                        Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
+                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+
+                                        int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                        int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                        int iconBottom = iconTop + icon.getIntrinsicHeight();
+                                        if (dX < 0) { // Swiping to the left
+                                            int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+                                            int iconRight = itemView.getRight() - iconMargin;
+                                            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                                            background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                                                    itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
+                                        } else { // view is unSwiped
+                                            background.setBounds(0, 0, 0, 0);
+                                        }
+
+                                        background.draw(c);
+                                        icon.draw(c);
+                                    }
+                                });
+                                itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+                            }
                             loadingIV.setVisibility(View.GONE);
                             equiView.setVisibility(View.VISIBLE);
                             mainRecyclerView.setVisibility(View.VISIBLE);

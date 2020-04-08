@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -88,7 +89,16 @@ public class SignUpActivity extends AppCompatActivity {
                                                     loginLoadingIV.setVisibility(View.GONE);
                                                     Toast.makeText(SignUpActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
                                                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                                    prefs.edit().putString("name", hashMap.get("name").toString()).apply();
+                                                    if ((boolean) hashMap.get("isAdmin")) {
+                                                        prefs.edit().putBoolean("com.stevecao.avportal.isAdmin", true).apply();
+                                                        loginLoadingIV.setVisibility(View.GONE);
+                                                    } else {
+                                                        prefs.edit().putBoolean("com.stevecao.avportal.isAdmin", false).apply();
+                                                        loginLoadingIV.setVisibility(View.GONE);
+                                                    }
                                                 });
+
 
                                     } else {
                                         loginLoadingIV.setVisibility(View.GONE);
@@ -96,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         submitBtn.setVisibility(View.VISIBLE);
                                         nameText.setVisibility(View.VISIBLE);
                                         passwordText.setVisibility(View.VISIBLE);
+                                        phoneText.setVisibility(View.VISIBLE);
                                         Toast.makeText(SignUpActivity.this, "Sign-up failed!", Toast.LENGTH_SHORT).show();
                                     }
                                 });

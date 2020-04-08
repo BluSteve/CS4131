@@ -38,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.stevecao.avportal.MainActivity;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.adapter.AnnouncementAdapter;
 import com.stevecao.avportal.model.Announcement;
@@ -111,6 +112,7 @@ public class AnnouncementsFragment extends Fragment {
         } else {
             prefs = mContext.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
             isAdmin = prefs.getBoolean("com.stevecao.avportal.isAdmin", false);
+            Log.d("asdmin", String.valueOf(isAdmin));
             if (isAdmin) {
                 fab.setVisibility(View.VISIBLE);
                 fab.bringToFront();
@@ -145,36 +147,31 @@ public class AnnouncementsFragment extends Fragment {
                         else {
                             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                             String finalEUrl = eUrl;
-                            FirebaseFirestore.getInstance().collection("users")
-                                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .get()
-                                    .addOnSuccessListener((task1) -> {
-                                        String name = task1.get("name").toString();
-                                        String filename = email + "_" + (new Date()).getTime();
-                                        StorageReference ref = FirebaseStorage.getInstance().getReference().child(filename);
-                                        ref.putStream(is).addOnSuccessListener((task) -> {
-                                            Log.d("storage", "success");
-                                            HashMap<String, Object> hashMap = new HashMap<>(0);
-                                            hashMap.put("authorEmail", email);
-                                            hashMap.put("authorName", name);
-                                            hashMap.put("content", eContent);
-                                            hashMap.put("url", finalEUrl);
-                                            hashMap.put("title", eTitle);
-                                            hashMap.put("datePublished", Timestamp.now());
-                                            ref.getDownloadUrl().addOnSuccessListener((task3) -> {
-                                                hashMap.put("imageUrl", task3.toString());
-                                                FirebaseFirestore.getInstance().collection("announcements")
-                                                        .add(hashMap)
-                                                        .addOnSuccessListener((task2) -> {
-                                                            Log.d("storage", "success1");
+                            String name = MainActivity.getUser().getName();
+                            String filename = email + "_" + (new Date()).getTime();
+                            StorageReference ref = FirebaseStorage.getInstance().getReference().child(filename);
+                            ref.putStream(is).addOnSuccessListener((task) -> {
+                                Log.d("storage", "success");
+                                HashMap<String, Object> hashMap = new HashMap<>(0);
+                                hashMap.put("authorEmail", email);
+                                hashMap.put("authorName", name);
+                                hashMap.put("content", eContent);
+                                hashMap.put("url", finalEUrl);
+                                hashMap.put("title", eTitle);
+                                hashMap.put("datePublished", Timestamp.now());
+                                ref.getDownloadUrl().addOnSuccessListener((task3) -> {
+                                    hashMap.put("imageUrl", task3.toString());
+                                    FirebaseFirestore.getInstance().collection("announcements")
+                                            .add(hashMap)
+                                            .addOnSuccessListener((task2) -> {
+                                                Log.d("storage", "success1");
 
-                                                            Toast.makeText(mContext, "Announcement made!", Toast.LENGTH_SHORT).show();
-                                                        });
-                                                    });
+                                                Toast.makeText(mContext, "Announcement made!", Toast.LENGTH_SHORT).show();
+                                            });
+                                });
 
-                                        });
 
-                                    });
+                            });
 
                         }
                     });
@@ -232,54 +229,56 @@ public class AnnouncementsFragment extends Fragment {
                             }
 
                             annAdapter = new AnnouncementAdapter(mContext, anns);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                                @Override
-                                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                                    return false;
-                                }
-
-                                @Override
-                                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                    builder.setTitle(mContext.getString(R.string.deleteConfirm));
-                                    builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
-                                        annAdapter.deleteItem(viewHolder.getAdapterPosition());
-                                    });
-                                    builder.setNegativeButton(mContext.getString(R.string.no), (dialog, which) -> {
-                                                (new UpdateNews()).execute();
-                                            });
-                                    builder.show();
-                                }
-
-                                @Override
-                                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                                    super.onChildDraw(c, recyclerView, viewHolder, dX,
-                                            dY, actionState, isCurrentlyActive);
-                                    View itemView = viewHolder.itemView;
-                                    int backgroundCornerOffset = 100;
-                                    Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
-                                    ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
-
-                                    int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                                    int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                                    int iconBottom = iconTop + icon.getIntrinsicHeight();
-                                    if (dX < 0) { // Swiping to the left
-                                        int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
-                                        int iconRight = itemView.getRight() - iconMargin;
-                                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                                        background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-                                                itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
-                                    } else { // view is unSwiped
-                                        background.setBounds(0, 0, 0, 0);
+                            if (isAdmin) {
+                                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                                    @Override
+                                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                        return false;
                                     }
 
-                                    background.draw(c);
-                                    icon.draw(c);
-                                }
-                            });
-                            itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+                                    @Override
+                                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                        builder.setTitle(mContext.getString(R.string.deleteConfirm));
+                                        builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
+                                            annAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                        });
+                                        builder.setNegativeButton(mContext.getString(R.string.no), (dialog, which) -> {
+                                            (new UpdateNews()).execute();
+                                        });
+                                        builder.show();
+                                    }
+
+                                    @Override
+                                    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                                        super.onChildDraw(c, recyclerView, viewHolder, dX,
+                                                dY, actionState, isCurrentlyActive);
+                                        View itemView = viewHolder.itemView;
+                                        int backgroundCornerOffset = 100;
+                                        Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
+                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+
+                                        int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                        int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                                        int iconBottom = iconTop + icon.getIntrinsicHeight();
+                                        if (dX < 0) { // Swiping to the left
+                                            int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+                                            int iconRight = itemView.getRight() - iconMargin;
+                                            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                                            background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                                                    itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
+                                        } else { // view is unSwiped
+                                            background.setBounds(0, 0, 0, 0);
+                                        }
+
+                                        background.draw(c);
+                                        icon.draw(c);
+                                    }
+                                });
+                                itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+                            }
                             mainRecyclerView.setAdapter(annAdapter);
                             loadingIV.setVisibility(View.GONE);
                             mainRecyclerView.setVisibility(View.VISIBLE);

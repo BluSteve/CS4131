@@ -1,6 +1,11 @@
 package com.stevecao.avportal.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +18,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.Timestamp;
@@ -39,6 +46,9 @@ public class EventsFragment extends Fragment {
     ImageView loadingIV;
     TextView textView;
     Context mContext;
+    boolean isAdmin;
+    SharedPreferences prefs;
+    SwipeRefreshLayout srl;
 
     public static HashMap<String, String> getUserEvents() {
         return userEvents;
@@ -61,13 +71,15 @@ public class EventsFragment extends Fragment {
         textView = getView().findViewById(R.id.eventsNoUser);
         mainRecyclerView = getView().findViewById(R.id.eventsRV);
         loadingIV = getView().findViewById(R.id.eventsLoadingIV);
-
+        srl = getView().findViewById(R.id.eventsSrl);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        srl.setOnRefreshListener(() -> (new EventsFragment.UpdateEvents()).execute());
+        prefs = mContext.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
+        isAdmin = prefs.getBoolean("com.stevecao.avportal.isAdmin", false);
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             mainRecyclerView.setVisibility(View.GONE);
             loadingIV.setVisibility(View.GONE);
@@ -155,9 +167,60 @@ public class EventsFragment extends Fragment {
 
                                         eventAdapter = new EventAdapter(mContext, events);
                                         Log.d("events", events.toString());
+//                                        if (isAdmin) {
+//                                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+//                                                @Override
+//                                                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                                                    return false;
+//                                                }
+//
+//                                                @Override
+//                                                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//
+//                                                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//                                                    builder.setTitle(mContext.getString(R.string.deleteConfirm));
+//                                                    builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
+//                                                        eventAdapter.deleteItem(viewHolder.getAdapterPosition());
+//                                                    });
+//                                                    builder.setNegativeButton(mContext.getString(R.string.no), (dialog, which) -> {
+//                                                        (new EventsFragment.UpdateEvents()).execute();
+//                                                    });
+//                                                    builder.show();
+//                                                }
+//
+//                                                @Override
+//                                                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//                                                    super.onChildDraw(c, recyclerView, viewHolder, dX,
+//                                                            dY, actionState, isCurrentlyActive);
+//                                                    View itemView = viewHolder.itemView;
+//                                                    int backgroundCornerOffset = 100;
+//                                                    Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
+//                                                    ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+//
+//                                                    int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+//                                                    int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+//                                                    int iconBottom = iconTop + icon.getIntrinsicHeight();
+//                                                    if (dX < 0) { // Swiping to the left
+//                                                        int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+//                                                        int iconRight = itemView.getRight() - iconMargin;
+//                                                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+//
+//                                                        background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+//                                                                itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
+//                                                    } else { // view is unSwiped
+//                                                        background.setBounds(0, 0, 0, 0);
+//                                                    }
+//
+//                                                    background.draw(c);
+//                                                    icon.draw(c);
+//                                                }
+//                                            });
+//                                            itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+//                                        }
                                         mainRecyclerView.setAdapter(eventAdapter);
                                         loadingIV.setVisibility(View.GONE);
                                         mainRecyclerView.setVisibility(View.VISIBLE);
+                                        srl.setRefreshing(false);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
