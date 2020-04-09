@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,7 @@ public class EquipmentFragment extends Fragment {
     FloatingActionButton fab;
     String id;
     boolean isAdmin;
+    LinearLayout ll;
     ArrayList<InputStream> is = new ArrayList<>(0);
 
 
@@ -87,6 +89,7 @@ public class EquipmentFragment extends Fragment {
         sortSpinner = getView().findViewById(R.id.equiSortSpinner);
         fab = getView().findViewById(R.id.equiFab);
         equiView = getView().findViewById(R.id.equiView);
+        ll = getView().findViewById(R.id.linearLayout3);
         srl = getView().findViewById(R.id.equiSRL);
     }
 
@@ -119,6 +122,7 @@ public class EquipmentFragment extends Fragment {
             mainRecyclerView.setVisibility(View.GONE);
             loadingIV.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.GONE);
         } else {
             sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -236,8 +240,10 @@ public class EquipmentFragment extends Fragment {
                                 ArrayList<URL> imageUrls = new ArrayList<>(0);
                                 long quantity, cost;
 
-                                for (String s : (ArrayList<String>) document.get("imageUrls")) {
-                                    imageUrls.add(new URL(s));
+                                if (document.get("imageUrls") != null) {
+                                    for (String s : (ArrayList<String>) document.get("imageUrls")) {
+                                        imageUrls.add(new URL(s));
+                                    }
                                 }
                                 brand = document.get("brand").toString();
                                 name = document.get("name").toString();

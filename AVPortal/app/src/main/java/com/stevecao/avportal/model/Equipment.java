@@ -21,7 +21,9 @@ public class Equipment {
         this.desc = desc;
         this.cost = cost;
         this.quantity = quantity;
-        this.mainImageUrl = imageUrls.get(0);
+        if (imageUrls.size() > 0)
+            this.mainImageUrl = imageUrls.get(0);
+        else this.mainImageUrl = null;
         this.imageUrls = imageUrls;
         this.id = id;
     }

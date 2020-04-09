@@ -56,6 +56,7 @@ import java.util.HashMap;
 
 public class DocumentsFragment extends Fragment {
     Context mContext;
+    TextView noUser;
     WebView wv;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,9 +69,15 @@ public class DocumentsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mContext = view.getContext();
         wv = view.findViewById(R.id.webView);
-        wv.setWebViewClient(new WebViewClient());
-        wv.getSettings().setJavaScriptEnabled(true);
-        wv.loadUrl("https://docs.google.com/spreadsheets/d/1Py-iZZD70HqhDSmV2nu9HiH2D3HfX5v-vHlNyweJn6E/edit?usp=sharing");
+        noUser = view.findViewById(R.id.webViewNoUser);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            noUser.setVisibility(View.VISIBLE);
+            wv.setVisibility(View.GONE);
+        } else {
+            wv.setWebViewClient(new WebViewClient());
+            wv.getSettings().setJavaScriptEnabled(true);
+            wv.loadUrl("https://docs.google.com/spreadsheets/d/1Py-iZZD70HqhDSmV2nu9HiH2D3HfX5v-vHlNyweJn6E/edit?usp=sharing");
+        }
     }
 
     @Override

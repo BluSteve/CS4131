@@ -6,6 +6,18 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/stageNoUser"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/noUser"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/notifsTV"
         android:layout_width="0dp"
         android:layout_height="200dp"
@@ -40,6 +52,15 @@
         android:layout_marginEnd="8dp"
         android:text="@string/add"
         app:layout_constraintEnd_toStartOf="@+id/stageDeleteBtn"
+        app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
+
+    <Button
+        android:id="@+id/stageMacroBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/macro"
+        app:layout_constraintEnd_toStartOf="@+id/stageAddBtn"
         app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
 
     <FrameLayout

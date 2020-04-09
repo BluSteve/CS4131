@@ -75,7 +75,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.titleTV.setText(ann.getTitle());
         holder.sourceTV.setText(ann.getAuthor());
         holder.dateTV.setText(ann.getStringDate());
-        if (!ann.getImageUrl().toString().equals(""))
+        if (ann.getImageUrl() != null)
             Glide.with(mContext).load(ann.getImageUrl()).into(holder.imageView);
         else holder.imageView.setVisibility(View.GONE);
 
@@ -95,7 +95,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             ppTitleTV.setText(annTitle);
             ppTitleTV.setMovementMethod(LinkMovementMethod.getInstance());
             ppTitleTV.setOnClickListener((s2) -> {
-                if (!ann.getUrl().toString().equals("")) {
+                if (ann.getUrl() != null) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ann.getUrl().toString()));
                     mContext.startActivity(intent);
                 } else {
@@ -106,7 +106,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             ppSourceTV.setText(ann.getAuthor());
             ppDateTV.setText(ann.getStringDate());
             ppContentTV.setText(ann.getContent());
-            if (!ann.getImageUrl().toString().equals("")){
+            if (ann.getImageUrl() != null){
                 Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
                 ppImageView.setOnLongClickListener((s3) -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

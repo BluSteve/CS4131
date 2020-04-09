@@ -276,8 +276,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                                     ArrayList<URL> imageUrls = new ArrayList<>(0);
                                     long quantity, cost;
 
-                                    for (String s2 : (ArrayList<String>) document.get("imageUrls")) {
-                                        imageUrls.add(new URL(s2));
+                                    if (document.get("imageUrls") != null) {
+                                        for (String s2 : (ArrayList<String>) document.get("imageUrls")) {
+                                            imageUrls.add(new URL(s2));
+                                        }
                                     }
                                     brand = document.get("brand").toString();
                                     name = document.get("name").toString();

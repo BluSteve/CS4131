@@ -50,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -136,22 +137,19 @@ public class AnnouncementsFragment extends Fragment {
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
                     });
                     builder.setPositiveButton(mContext.getString(R.string.addBtn), (dialog, which) -> {
-                        Log.d("bitmap", is.toString());
+//                        Log.d("bitmap", is.toString());
                         String eTitle = titleET.getText().toString();
                         String eContent = contentET.getText().toString();
                         String eUrl = urlET.getText().toString();
-                        if (!eUrl.startsWith("https://") && !eUrl.startsWith("http://"))
+                        if (!eUrl.startsWith("https://") && !eUrl.startsWith("http://") && !eUrl.equals(""))
                             eUrl = "https://" + eUrl;
-                        if (eTitle.equals("") || !((new UrlValidator()).isValid(eUrl)))
+                        if (eTitle.equals("") || !(((new UrlValidator()).isValid(eUrl)) || eUrl.equals("")))
                             Toast.makeText(mContext, "Please enter valid values!", Toast.LENGTH_SHORT).show();
                         else {
                             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                             String finalEUrl = eUrl;
                             String name = MainActivity.getUser().getName();
-                            String filename = email + "_" + (new Date()).getTime();
-                            StorageReference ref = FirebaseStorage.getInstance().getReference().child(filename);
-                            ref.putStream(is).addOnSuccessListener((task) -> {
-                                Log.d("storage", "success");
+                            if (is == null) {
                                 HashMap<String, Object> hashMap = new HashMap<>(0);
                                 hashMap.put("authorEmail", email);
                                 hashMap.put("authorName", name);
@@ -159,24 +157,39 @@ public class AnnouncementsFragment extends Fragment {
                                 hashMap.put("url", finalEUrl);
                                 hashMap.put("title", eTitle);
                                 hashMap.put("datePublished", Timestamp.now());
-                                ref.getDownloadUrl().addOnSuccessListener((task3) -> {
-                                    hashMap.put("imageUrl", task3.toString());
-                                    FirebaseFirestore.getInstance().collection("announcements")
-                                            .add(hashMap)
-                                            .addOnSuccessListener((task2) -> {
-                                                Log.d("storage", "success1");
+                                hashMap.put("imageUrl", "");
 
-                                                Toast.makeText(mContext, "Announcement made!", Toast.LENGTH_SHORT).show();
-                                            });
+                                FirebaseFirestore.getInstance().collection("announcements")
+                                        .add(hashMap)
+                                        .addOnSuccessListener((task2) -> {
+                                            Log.d("storage", "success1");
+                                            Toast.makeText(mContext, "Announcement made!", Toast.LENGTH_SHORT).show();
+                                        });
+                            } else {
+                                String filename = email + "_" + (new Date()).getTime();
+                                StorageReference ref = FirebaseStorage.getInstance().getReference().child(filename);
+                                ref.putStream(is).addOnSuccessListener((task) -> {
+                                    Log.d("storage", "success");
+                                    HashMap<String, Object> hashMap = new HashMap<>(0);
+                                    hashMap.put("authorEmail", email);
+                                    hashMap.put("authorName", name);
+                                    hashMap.put("content", eContent);
+                                    hashMap.put("url", finalEUrl);
+                                    hashMap.put("title", eTitle);
+                                    hashMap.put("datePublished", Timestamp.now());
+                                    ref.getDownloadUrl().addOnSuccessListener((task3) -> {
+                                        hashMap.put("imageUrl", task3.toString());
+                                        FirebaseFirestore.getInstance().collection("announcements")
+                                                .add(hashMap)
+                                                .addOnSuccessListener((task2) -> {
+                                                    Log.d("storage", "success1");
+                                                    Toast.makeText(mContext, "Announcement made!", Toast.LENGTH_SHORT).show();
+                                                });
+                                    });
                                 });
-
-
-                            });
-
+                            }
                         }
                     });
-
-
                     builder.show();
                 });
             }
@@ -220,14 +233,20 @@ public class AnnouncementsFragment extends Fragment {
                                 authorEmail = document.get("authorEmail").toString();
                                 title = WordUtils.capitalize(document.get("title").toString());
                                 content = document.get("content").toString();
-                                url = new URL(document.get("url").toString());
-                                imageUrl = new URL(document.get("imageUrl").toString());
+                                if (document.get("url").toString().equals(""))
+                                    url = null;
+                                else
+                                    url = new URL(document.get("url").toString());
+                                if (document.get("imageUrl").toString().equals(""))
+                                    imageUrl = null;
+                                else
+                                    imageUrl = new URL(document.get("imageUrl").toString());
 
                                 Announcement ann = new Announcement(authorName, authorEmail, title,
                                         content, url, imageUrl, datePublished, document.getId());
                                 anns.add(ann);
                             }
-
+                            Collections.reverse(anns);
                             annAdapter = new AnnouncementAdapter(mContext, anns);
                             if (isAdmin) {
                                 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

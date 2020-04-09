@@ -79,8 +79,6 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
         holder.count.setText(faderNo + "");
         Log.d("here", faders.toString());
         refresh(holder.seekBar, position);
-
-
     }
 
     private void refresh(VerticalSeekBar seekBar, int position) {
@@ -104,7 +102,7 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
                     if (Math.abs(seekBar.getProgress() - lc.getDestination()) < 5) {
                         long end = System.nanoTime();
                         long temp = (end - start) / 1000000;
-                        int errorMargin = 300;
+                        int errorMargin = 700;
 
                         Log.d("currents", "stopped " + lc.getTimeTaken() + " " + temp);
                         if (Math.abs(temp - lc.getTimeTaken()) < errorMargin) {

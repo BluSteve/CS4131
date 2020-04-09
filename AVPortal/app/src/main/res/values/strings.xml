@@ -96,7 +96,17 @@
     <string name="edit">edit</string>
     <string name="delete">delete</string>
     <string name="add">add</string>
+    <string name="macro">macro</string>
+    <string name="macroConfirm">Attach macro? (permanent)</string>
     <string name="finish">finish</string>
+
+    <string name="shakeIntensity">Shake intensity for macro</string>
+
+    <string-array name="shake_intensities">
+        <item>HIGH</item>
+        <item>MEDIUM</item>
+        <item>LOW</item>
+    </string-array>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
