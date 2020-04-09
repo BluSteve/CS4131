@@ -39,11 +39,13 @@
 
     <string name="noUser">Please log-in to use this feature.</string>
     <string name="imageUploaded">Image uploaded</string>
+    <string name="imagesUploaded">images uploaded.</string>
 
     <string name="shareBtn">SHARE</string>
     <string name="shareImage">Share Image</string>
     <string name="addImage">ADD IMAGE</string>
     <string name="newAnn">Add new announcement</string>
+    <string name="newEqui">Add new equipment</string>
     <string name="addBtn">ADD</string>
     <string name="addToCal">Add to Calendar</string>
     <string name="signUpConfirm">Are you sure you want to sign up for</string>
@@ -74,6 +76,27 @@
     <string name="annInputTitle">Title</string>
     <string name="annInputContent">Content</string>
     <string name="annInputUrl">URL (optional)</string>
+
+    <string name="addImages">ADD IMAGES</string>
+    <string name="equiInputBrand">Brand</string>
+    <string name="equiInputName">Name</string>
+    <string name="equiInputDesc">Description</string>
+    <string name="equiInputCost">Cost</string>
+    <string name="equiInputQuan">Quantity</string>
+
+    <string name="stageInputNotif">Notification message</string>
+    <string name="stageInputTTS">Text-To-Speech message</string>
+    <string name="newStageAction">New stage action</string>
+
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="upload">Upload</string>
+    <string name="ok">Ok</string>
+
+    <string name="edit">edit</string>
+    <string name="delete">delete</string>
+    <string name="add">add</string>
+    <string name="finish">finish</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -81,7 +104,7 @@
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
+<string name="seekBarCount">Number of faders for lights</string>
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>

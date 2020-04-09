@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment, R.id.nav_lights)
+                R.id.nav_announcements, R.id.nav_events, R.id.nav_equipment, R.id.nav_lights, R.id.nav_resources)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_stageMode:
                     //TODO add stageMode
+                    Intent intent2 = new Intent(this, StageModeActivity.class);
+                    startActivity(intent2);
             }
             return false;
         });

@@ -27,10 +27,6 @@
                     android:id="@+id/nav_lights"
                     android:icon="@drawable/ic_lightbulb_outline_black_24dp"
                     android:title="@string/menu_lights" />
-                <item
-                    android:id="@+id/nav_sound"
-                    android:icon="@drawable/ic_speaker_black_24dp"
-                    android:title="@string/menu_sound" />
             </group>
         </menu>
     </item>
@@ -41,10 +37,10 @@
                     android:id="@+id/nav_resources"
                     android:icon="@drawable/ic_resources_black_24dp"
                     android:title="@string/menu_resources" />
-                <item
-                    android:id="@+id/nav_gallery"
-                    android:icon="@drawable/ic_menu_gallery"
-                    android:title="@string/menu_gallery" />
+<!--                <item-->
+<!--                    android:id="@+id/nav_gallery"-->
+<!--                    android:icon="@drawable/ic_menu_gallery"-->
+<!--                    android:title="@string/menu_gallery" />-->
             </group>
         </menu>
     </item>

@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.Random;
 
 public class LightingCue {
-    public final static int FAST = 300;
-    public final static int NORMAL = 1000;
-    public final static int SLOW = 3000;
+    public final static int FAST = 1000;
+    public final static int NORMAL = 2500;
+    public final static int SLOW = 4000;
     Random r = new Random();
     private int faderNo;
     private int destination, timeTaken;
@@ -18,14 +18,28 @@ public class LightingCue {
 
     public LightingCue(ArrayList<Integer> possibleFaderNo, ArrayList<Integer> currents) {
         faderNo = possibleFaderNo.get(r.nextInt(possibleFaderNo.size()));
-        if (r.nextBoolean() || Collections.min(currents)<1) {
-            int maxc = Collections.max(currents);
-            this.destination = r.nextInt((100 - maxc) + 1) + maxc;
+        int current = currents.get(faderNo-1);
+        if ( current < 30){
+            current += 20;
+            this.destination = r.nextInt((100 - current) + 1) + current;
             goingUp = true;
-        } else {
-            Log.d("currents", currents.toString());
-            this.destination = r.nextInt(Collections.min(currents));
+        }
+        else if (current > 70) {
+            current -= 20;
+            this.destination = r.nextInt(current);
             goingUp = false;
+        }
+        else {
+            if (r.nextBoolean()) {
+                current += 20;
+                this.destination = r.nextInt((100 - current) + 1) + current;
+                goingUp = true;
+            }
+            else {
+                current -= 20;
+                this.destination = r.nextInt(current);
+                goingUp = false;
+            }
         }
         this.timeTaken = (new int[]{FAST, NORMAL, SLOW})[r.nextInt(3)];
     }
@@ -36,8 +50,10 @@ public class LightingCue {
             switch (timeTaken) {
                 case FAST:
                     s = faderNo + "↑↑" + destination;
+                    break;
                 case NORMAL:
                     s = faderNo + "↑" + destination;
+                    break;
                 case SLOW:
                     s = faderNo + "▲" + destination;
             }
@@ -45,8 +61,10 @@ public class LightingCue {
             switch (timeTaken) {
                 case FAST:
                     s = faderNo + "↓↓" + destination;
+                    break;
                 case NORMAL:
                     s = faderNo + "↓" + destination;
+                    break;
                 case SLOW:
                     s = faderNo + "▼" + destination;
             }

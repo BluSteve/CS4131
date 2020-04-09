@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
     implementation 'androidx.preference:preference:1.1.0-rc01'
     implementation 'com.github.florent37:expansionpanel:1.2.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'

@@ -1,10 +1,11 @@
 package com.stevecao.avportal.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,17 +30,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.Timestamp;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.adapter.EquipmentAdapter;
 import com.stevecao.avportal.model.Equipment;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EquipmentFragment extends Fragment {
     RecyclerView mainRecyclerView;
@@ -48,13 +58,16 @@ public class EquipmentFragment extends Fragment {
     TextView textView;
     EditText searchText;
     Spinner sortSpinner;
-    Button searchBtn;
+    Button searchBtn, addImage;
     Context mContext;
     EquipmentAdapter equiAdapter;
     View equiView;
     SharedPreferences prefs;
     String selectedSort = "";
+    FloatingActionButton fab;
+    String id;
     boolean isAdmin;
+    ArrayList<InputStream> is = new ArrayList<>(0);
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,8 +85,27 @@ public class EquipmentFragment extends Fragment {
         searchBtn = getView().findViewById(R.id.equiSearchBtn);
         searchText = getView().findViewById(R.id.equiSearchText);
         sortSpinner = getView().findViewById(R.id.equiSortSpinner);
+        fab = getView().findViewById(R.id.equiFab);
         equiView = getView().findViewById(R.id.equiView);
         srl = getView().findViewById(R.id.equiSRL);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            if (data == null)
+                Toast.makeText(mContext, "Pick a valid image!", Toast.LENGTH_SHORT).show();
+            else {
+                try {
+                    is.add(mContext.getContentResolver().openInputStream(data.getData()));
+                    Toast.makeText(mContext, "Image chosen", Toast.LENGTH_SHORT).show();
+                    addImage.setText(is.size() + " " +getString(R.string.imagesUploaded));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -83,26 +115,99 @@ public class EquipmentFragment extends Fragment {
         isAdmin = prefs.getBoolean("com.stevecao.avportal.isAdmin", false);
         updateEqui("", "");
 
-        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedSort = parent.getItemAtPosition(position).toString();
-            }
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            mainRecyclerView.setVisibility(View.GONE);
+            loadingIV.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selectedSort = parent.getItemAtPosition(position).toString();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                selectedSort = "";
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    selectedSort = "";
+                }
+            });
+            searchBtn.setOnClickListener((s) -> {
+                String enteredSearch = searchText.getText().toString();
+                if (enteredSearch.equals("") && selectedSort.equals(""))
+                    Toast.makeText(mContext, "No search term detected", Toast.LENGTH_SHORT).show();
+                else updateEqui(enteredSearch, selectedSort);
+            });
+            srl.setOnRefreshListener(() -> {
+                updateEqui("", "");
+            });
+            if (isAdmin) {
+                fab.setVisibility(View.VISIBLE);
+                fab.bringToFront();
+
+                fab.setOnClickListener((s) -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(mContext.getString(R.string.newEqui));
+
+                    final View customLayout = LayoutInflater.from(mContext).inflate(R.layout.equi_input, null);
+                    builder.setView(customLayout);
+                    EditText brandET, nameET, descET, costET, quanET;
+                    brandET = customLayout.findViewById(R.id.equiInputBrand);
+                    nameET = customLayout.findViewById(R.id.equiInputName);
+                    descET = customLayout.findViewById(R.id.equiInputDesc);
+                    costET = customLayout.findViewById(R.id.equiInputCost);
+                    quanET = customLayout.findViewById(R.id.equiInputQuan);
+                    addImage = customLayout.findViewById(R.id.equiInputImgBtn);
+                    addImage.setOnClickListener((s1) -> {
+                        final int PICK_IMAGE = 1;
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+                    });
+                    builder.setPositiveButton(mContext.getString(R.string.addBtn), (dialog, which) -> {
+                        Log.d("bitmap", is.toString());
+                        String eBrand = brandET.getText().toString();
+                        String eName = nameET.getText().toString();
+                        String eDesc = descET.getText().toString();
+                        String eCost = costET.getText().toString();
+                        String eQuan = quanET.getText().toString();
+                        if (eBrand.equals("") || eName.equals("") || eCost.equals("") || eQuan.equals(""))
+                            Toast.makeText(mContext, "Please enter valid values!", Toast.LENGTH_SHORT).show();
+                        else {
+                            HashMap<String, Object> hashMap = new HashMap<>(0);
+                            hashMap.put("brand", eBrand);
+                            hashMap.put("name", eName);
+                            hashMap.put("desc", eDesc);
+                            hashMap.put("cost", Long.parseLong(eCost));
+                            hashMap.put("quantity", Long.parseLong(eQuan));
+                            FirebaseFirestore.getInstance().collection("equipment")
+                                    .add(hashMap)
+                                    .addOnSuccessListener((task2) -> {
+                                        Log.d("storage", "success1");
+                                        Toast.makeText(mContext, "Equipment registered!", Toast.LENGTH_SHORT).show();
+                                        id = task2.getId();
+
+                                        for (InputStream i : is) {
+                                            String filename = eBrand + eName + "_" + (new Date()).getTime() + (new Random()).nextInt(1000);
+                                            StorageReference ref = FirebaseStorage.getInstance().getReference().child(filename);
+                                            ref.putStream(i).addOnSuccessListener((task) -> {
+                                                Log.d("storage", "success");
+                                                ref.getDownloadUrl().addOnSuccessListener((task3) -> {
+                                                    FirebaseFirestore.getInstance().collection("equipment")
+                                                            .document(id)
+                                                            .update("imageUrls", FieldValue.arrayUnion(task3.toString()));
+
+                                                });
+                                            });
+                                        }
+                                    });
+
+                        }
+                    });
+                    builder.show();
+                });
             }
-        });
-        searchBtn.setOnClickListener((s) -> {
-            String enteredSearch = searchText.getText().toString();
-            if (enteredSearch.equals("") && selectedSort.equals(""))
-                Toast.makeText(mContext, "No search term detected", Toast.LENGTH_SHORT).show();
-            else updateEqui(enteredSearch, selectedSort);
-        });
-        srl.setOnRefreshListener(() -> {
-            updateEqui("", "");
-        });
+        }
     }
 
     private void updateEqui(String searchTerm, String sortTerm) {

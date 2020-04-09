@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:progressDrawable="@drawable/seek_style"
             android:splitTrack="false"
+            android:max="100"
             android:thumb="@drawable/seek"
             app:seekBarRotation="CW270" />
     </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>

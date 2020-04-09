@@ -56,27 +56,28 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
         this.cuesTV = cues;
         SharedPreferences prefs = mContext.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
         int size = prefs.getInt("com.stevecao.avportal.faderCount", 5);
-        for (int x =1; x < (size+1); x++) faders.add(x);
-        for (int x =1; x < (size+1); x++) currents.add(0);
+        for (int x = 1; x < (size + 1); x++) faders.add(x);
+        for (int x = 1; x < (size + 1); x++) currents.add(0);
 
         lc = new LightingCue(faders, currents);
         cuesTV.append(lc.formattedLightingCue() + "\n");
-        Log.d("here","here");
+        Log.d("here", "here");
     }
 
     @Override
     public LightsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.container = parent;
-        Log.d("here","here");
+        Log.d("here", "here");
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.seekbar, parent, false);
         return new MyViewHolder(itemView);
     }
+
     @Override
     public void onBindViewHolder(@NonNull LightsAdapter.MyViewHolder holder, int position) {
         int faderNo = faders.get(position);
         holder.count.setText(faderNo + "");
-        Log.d("here",faders.toString());
+        Log.d("here", faders.toString());
         refresh(holder.seekBar, position);
 
 
@@ -84,30 +85,49 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
 
     private void refresh(VerticalSeekBar seekBar, int position) {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            long start;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 currents.set(position, progress);
-                if (Math.abs(progress-lc.getDestination())<5) {
-                    Toast.makeText(mContext, "Correct!", Toast.LENGTH_SHORT).show();
-
-                }
                 Log.d("currents", currents.toString());
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                start = System.nanoTime();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                if (lc.getFaderNo() == position + 1) {
+                    if (Math.abs(seekBar.getProgress() - lc.getDestination()) < 5) {
+                        long end = System.nanoTime();
+                        long temp = (end - start) / 1000000;
+                        int errorMargin = 300;
 
+                        Log.d("currents", "stopped " + lc.getTimeTaken() + " " + temp);
+                        if (Math.abs(temp - lc.getTimeTaken()) < errorMargin) {
+                            Toast.makeText(mContext, "Correct!", Toast.LENGTH_SHORT).show();
+                        } else if (temp - lc.getTimeTaken() > errorMargin) {
+                            Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too slow! ", Toast.LENGTH_SHORT).show();
+                        } else if (temp - lc.getTimeTaken() < -errorMargin) {
+                            Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too fast! ", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(mContext, "Incorrect!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    lc = new LightingCue(faders, currents);
+                    cuesTV.append(lc.formattedLightingCue() + "\n");
+                }
             }
         });
     }
+
     @Override
     public int getItemCount() {
-        Log.d("here2",faders.toString());
+        Log.d("here2", faders.toString());
         return faders.size();
     }
 
