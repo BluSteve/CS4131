@@ -246,7 +246,7 @@ public class AnnouncementsFragment extends Fragment {
                                         content, url, imageUrl, datePublished, document.getId());
                                 anns.add(ann);
                             }
-                            Collections.reverse(anns);
+                            Collections.sort(anns, (a2, a1) -> a1.getDatePublished().compareTo(a2.getDatePublished()));
                             annAdapter = new AnnouncementAdapter(mContext, anns);
                             if (isAdmin) {
                                 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

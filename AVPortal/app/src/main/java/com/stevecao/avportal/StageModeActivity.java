@@ -43,7 +43,7 @@ public class StageModeActivity extends AppCompatActivity {
     Button edit, add, delete, macro;
     FrameLayout housing;
     TextView notifsTV, noUser;
-    boolean isEditing, isMacroing;
+    boolean isEditing, isMacroing, isDeleting;
     float dX, dY;
     SensorManager sm;
     ShakeDetector sd;
@@ -159,6 +159,7 @@ public class StageModeActivity extends AppCompatActivity {
                     }
                 } else {
                     isMacroing = false;
+                    macro.setBackgroundColor(getColor(R.color.colorPrimary));
                 }
             });
             add.setOnClickListener((s) -> {
@@ -177,7 +178,7 @@ public class StageModeActivity extends AppCompatActivity {
                     String eTitle = eTitleTV.getText().toString();
                     String eNotif = eNotifTV.getText().toString();
                     String eTts = eTtsTV.getText().toString();
-                    if (eTitle.equals("") || eNotif.equals("")) {
+                    if (eTitle.equals("") || eNotif.equals("") || eTts.equals("")) {
                         Toast.makeText(this, "Please enter valid values!", Toast.LENGTH_SHORT).show();
                     } else {
                         String buttonId = (new Date()).getTime() + (new Random()).nextInt(1000) + "";
@@ -237,22 +238,35 @@ public class StageModeActivity extends AppCompatActivity {
                 }
             });
             delete.setOnClickListener((s) -> {
-                Log.d("btn", btns.toString());
-                for (Button btn : btns) {
-                    btn.setOnClickListener((s1) -> {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.deleteConfirm));
-                        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                            btn.setVisibility(View.GONE);
-                            btns.remove(btn);
-                            for (Button btn2 : btns) {
-                                btn2.setOnClickListener(new MyClickListener());
-                            }
-                            StageActionHandler.deleteAction(hashMap.get(btn).getId());
-                            hashMap.remove(btn);
+
+                if (!isDeleting) {
+                    delete.setBackgroundColor(getColor(R.color.colorSecondary));
+                    isDeleting = true;
+                    Log.d("btn", btns.toString());
+                    for (Button btn : btns) {
+                        btn.setOnClickListener((s1) -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setTitle(getString(R.string.deleteConfirm));
+                            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                                btn.setVisibility(View.GONE);
+                                if (sd != null)
+                                    sd.stop();
+                                btns.remove(btn);
+                                for (Button btn2 : btns) {
+                                    btn2.setOnClickListener(new MyClickListener());
+                                }
+                                StageActionHandler.deleteAction(hashMap.get(btn).getId());
+                                hashMap.remove(btn);
+                                delete.setBackgroundColor(getColor(R.color.colorPrimary));
+                                isDeleting = false;
+                            });
+                            builder.show();
                         });
-                        builder.show();
-                    });
+                    }
+                }
+                else {
+                    isDeleting = false;
+                    delete.setBackgroundColor(getColor(R.color.colorPrimary));
                 }
             });
         }

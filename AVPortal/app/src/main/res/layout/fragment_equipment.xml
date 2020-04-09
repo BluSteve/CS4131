@@ -117,7 +117,7 @@
         android:layout_marginBottom="4dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/equiRV"
+        app:layout_constraintBottom_toTopOf="@+id/equiSRL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
