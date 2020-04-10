@@ -299,7 +299,6 @@ public class EquipmentFragment extends Fragment {
 
                                     @Override
                                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                         builder.setTitle(mContext.getString(R.string.deleteConfirm));
                                         builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {

@@ -53,6 +53,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                 .inflate(R.layout.ann_card, parent, false);
         return new MyViewHolder(itemView);
     }
+
     public void deleteItem(int position) {
         Announcement toDelete = anns.get(position);
         anns.remove(position);
@@ -64,6 +65,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                     Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
                 });
     }
+
     @Override
     public void onBindViewHolder(@NonNull AnnouncementAdapter.MyViewHolder holder, int position) {
         Announcement ann = anns.get(position);
@@ -101,7 +103,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             ppSourceTV.setText(ann.getAuthor());
             ppDateTV.setText(ann.getStringDate());
             ppContentTV.setText(ann.getContent());
-            if (ann.getImageUrl() != null){
+            if (ann.getImageUrl() != null) {
                 Glide.with(mContext).load(ann.getImageUrl()).into(ppImageView);
                 ppImageView.setOnLongClickListener((s3) -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

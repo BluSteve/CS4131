@@ -1,6 +1,11 @@
 package com.stevecao.avportal.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +13,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.stevecao.avportal.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -45,7 +56,36 @@ public class ImageAdapter extends PagerAdapter {
         final ImageView imageView = imageLayout
                 .findViewById(R.id.sliderIV);
         Glide.with(mContext).asBitmap().load(imageUrls.get(position)).into(imageView);
-//        Log.d("events", imageUrls.get(position).toString());
+        imageView.setOnLongClickListener((s3) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle(mContext.getString(R.string.shareImage));
+            builder.setPositiveButton(mContext.getString(R.string.shareImage),
+                    (dialog, which) -> {
+                        Glide.with(mContext).
+                                asBitmap()
+                                .load(imageUrls.get(position))
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource,
+                                                                @Nullable Transition<? super Bitmap> transition) {
+                                        Intent sendIntent = new Intent();
+                                        sendIntent.setAction(Intent.ACTION_SEND);
+                                        sendIntent.putExtra(Intent.EXTRA_STREAM,
+                                                getLocalBitmapUri(resource));
+                                        sendIntent.setType("image/*");
+
+                                        Intent shareIntent = Intent.createChooser(sendIntent,
+                                                mContext.getString(R.string.shareImage));
+                                        mContext.startActivity(shareIntent);
+                                    }
+                                });
+
+
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
+        });
         view.addView(imageLayout);
         return imageLayout;
     }
@@ -64,5 +104,18 @@ public class ImageAdapter extends PagerAdapter {
         return null;
     }
 
-
+    public Uri getLocalBitmapUri(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "share_image_" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.parse(file.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
 }

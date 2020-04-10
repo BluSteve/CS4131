@@ -389,18 +389,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         return events.size();
     }
 
-    public void deleteItem(int position) {
-        Event toDelete = events.get(position);
-        events.remove(position);
-        FirebaseFirestore.getInstance().collection("events")
-                .document(toDelete.getId())
-                .delete()
-                .addOnSuccessListener((task) -> {
-                    Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
-                    notifyItemRemoved(position);
-                });
-    }
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTV, sourceTV, dateTV;
         public ImageView imageView, doubleTick;

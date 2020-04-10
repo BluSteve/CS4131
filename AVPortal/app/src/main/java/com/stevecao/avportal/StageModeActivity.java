@@ -118,7 +118,7 @@ public class StageModeActivity extends AppCompatActivity {
                     HashMap<String, Object> toUpload = new HashMap<>(0);
                     toUpload.put("notif", action.getNotif());
                     toUpload.put("tts", action.getTtstext());
-                    toUpload.put("rand", (new Random()).nextInt(1000));
+                    toUpload.put("rand", (new Random()).nextInt(100000));
                     FirebaseFirestore.getInstance().collection("stageactions")
                             .document("cue")
                             .set(toUpload)
@@ -318,7 +318,7 @@ public class StageModeActivity extends AppCompatActivity {
             HashMap<String, Object> toUpload = new HashMap<>(0);
             toUpload.put("notif", action.getNotif());
             toUpload.put("tts", action.getTtstext());
-            toUpload.put("rand", (new Random()).nextInt(1000));
+            toUpload.put("rand", (new Random()).nextInt(100000));
             FirebaseFirestore.getInstance().collection("stageactions")
                     .document("cue")
                     .set(toUpload)

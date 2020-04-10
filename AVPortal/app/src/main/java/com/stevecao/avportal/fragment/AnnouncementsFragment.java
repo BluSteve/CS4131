@@ -59,7 +59,7 @@ public class AnnouncementsFragment extends Fragment {
     TextView textView;
     Context mContext;
     FloatingActionButton fab;
-    boolean isAdmin;
+    boolean isAdmin, gotImage;
     SharedPreferences prefs;
     InputStream is;
     Button addImage;
@@ -91,6 +91,7 @@ public class AnnouncementsFragment extends Fragment {
                 try {
                     is = mContext.getContentResolver().openInputStream(data.getData());
                     Toast.makeText(mContext, "Image chosen", Toast.LENGTH_SHORT).show();
+                    gotImage = true;
                     addImage.setEnabled(false);
                     addImage.setText(getString(R.string.imageUploaded));
                 } catch (FileNotFoundException e) {
@@ -117,6 +118,7 @@ public class AnnouncementsFragment extends Fragment {
                 fab.bringToFront();
 
                 fab.setOnClickListener((s) -> {
+                    gotImage = false;
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle(mContext.getString(R.string.newAnn));
 
@@ -147,7 +149,7 @@ public class AnnouncementsFragment extends Fragment {
                             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                             String finalEUrl = eUrl;
                             String name = MainActivity.getUser().getName();
-                            if (is == null) {
+                            if (!gotImage) {
                                 HashMap<String, Object> hashMap = new HashMap<>(0);
                                 hashMap.put("authorEmail", email);
                                 hashMap.put("authorName", name);
@@ -187,6 +189,7 @@ public class AnnouncementsFragment extends Fragment {
                                 });
                             }
                         }
+                        (new UpdateNews()).execute();
                     });
                     builder.show();
                 });
@@ -267,6 +270,7 @@ public class AnnouncementsFragment extends Fragment {
                                         builder.setTitle(mContext.getString(R.string.deleteConfirm));
                                         builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
                                             annAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                            (new UpdateNews()).execute();
                                         });
                                         builder.setNegativeButton(mContext.getString(R.string.no), (dialog, which) -> {
                                             (new UpdateNews()).execute();

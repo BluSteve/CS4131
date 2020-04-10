@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                     updateViews();
                     break;
                 case R.id.action_stageMode:
-                    //TODO add stageMode
                     Intent intent2 = new Intent(this, StageModeActivity.class);
                     startActivity(intent2);
             }
