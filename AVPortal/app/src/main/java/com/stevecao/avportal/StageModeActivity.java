@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
@@ -45,6 +46,8 @@ public class StageModeActivity extends AppCompatActivity {
     float dX, dY;
     SensorManager sm;
     ShakeDetector sd;
+    PowerManager pm;
+    PowerManager.WakeLock wl;
     int current = 0;
 
     @Override
@@ -57,6 +60,9 @@ public class StageModeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stagemode);
 
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        pm = (PowerManager) getSystemService(POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "avportal:stagemode");
+        wl.acquire();
 
         add = findViewById(R.id.stageAddBtn);
         edit = findViewById(R.id.stageEditBtn);
@@ -266,8 +272,7 @@ public class StageModeActivity extends AppCompatActivity {
                             builder.show();
                         });
                     }
-                }
-                else {
+                } else {
                     isDeleting = false;
                     delete.setBackgroundColor(getColor(R.color.colorPrimary));
                 }
@@ -301,6 +306,7 @@ public class StageModeActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         t1.shutdown();
+        wl.release();
     }
 
     class MyClickListener implements View.OnClickListener {

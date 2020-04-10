@@ -50,7 +50,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class EquipmentFragment extends Fragment {
     RecyclerView mainRecyclerView;
@@ -103,7 +102,7 @@ public class EquipmentFragment extends Fragment {
                 try {
                     is.add(mContext.getContentResolver().openInputStream(data.getData()));
                     Toast.makeText(mContext, "Image chosen", Toast.LENGTH_SHORT).show();
-                    addImage.setText(is.size() + " " +getString(R.string.imagesUploaded));
+                    addImage.setText(is.size() + " " + getString(R.string.imagesUploaded));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -319,7 +318,7 @@ public class EquipmentFragment extends Fragment {
                                         View itemView = viewHolder.itemView;
                                         int backgroundCornerOffset = 100;
                                         Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
-                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.red));
 
                                         int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
                                         int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;

@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -248,6 +246,14 @@ public class AnnouncementsFragment extends Fragment {
                             }
                             Collections.sort(anns, (a2, a1) -> a1.getDatePublished().compareTo(a2.getDatePublished()));
                             annAdapter = new AnnouncementAdapter(mContext, anns);
+                            if (anns.size() == 0) {
+                                textView.setText(getString(R.string.noAnn));
+                                textView.setVisibility(View.VISIBLE);
+                                textView.bringToFront();
+                            } else {
+                                textView.setText(getString(R.string.noUser));
+                                textView.setVisibility(View.GONE);
+                            }
                             if (isAdmin) {
                                 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                                     @Override
@@ -275,7 +281,7 @@ public class AnnouncementsFragment extends Fragment {
                                         View itemView = viewHolder.itemView;
                                         int backgroundCornerOffset = 100;
                                         Drawable icon = mContext.getDrawable(R.drawable.ic_delete_forever_black_24dp);
-                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.colorSecondary));
+                                        ColorDrawable background = new ColorDrawable(mContext.getColor(R.color.red));
 
                                         int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
                                         int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;

@@ -108,6 +108,7 @@
         <item>MEDIUM</item>
         <item>LOW</item>
     </string-array>
+    <string name="noAnn">No announcements found</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
