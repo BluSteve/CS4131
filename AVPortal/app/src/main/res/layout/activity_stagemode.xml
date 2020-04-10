@@ -21,47 +21,53 @@
         android:id="@+id/notifsTV"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:layout_margin="5dp"
         android:background="@drawable/border"
         android:gravity="bottom|center_horizontal"
+        android:paddingBottom="5dp"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/stageEditBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/edit"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notifsTV">
 
-    <Button
-        android:id="@+id/stageDeleteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/delete"
-        app:layout_constraintEnd_toStartOf="@+id/stageEditBtn"
-        app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
+        <Button
+            android:id="@+id/stageAddBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/add" />
 
-    <Button
-        android:id="@+id/stageAddBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/add"
-        app:layout_constraintEnd_toStartOf="@+id/stageDeleteBtn"
-        app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
+        <Button
+            android:id="@+id/stageEditBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/edit" />
 
-    <Button
-        android:id="@+id/stageMacroBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/macro"
-        app:layout_constraintEnd_toStartOf="@+id/stageAddBtn"
-        app:layout_constraintTop_toBottomOf="@+id/notifsTV" />
+        <Button
+            android:id="@+id/stageMacroBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/macro" />
+
+        <Button
+            android:id="@+id/stageDeleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/btnHouse"
@@ -70,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stageAddBtn">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </FrameLayout>
 

@@ -102,6 +102,7 @@
 
     <string name="shakeIntensity">Shake intensity for macro</string>
 
+    <string name="lightingPrompt">Adjust the faders as per the lighting cues shown here: \n</string>
     <string-array name="shake_intensities">
         <item>HIGH</item>
         <item>MEDIUM</item>

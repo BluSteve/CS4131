@@ -31,9 +31,4 @@
         android:name="com.stevecao.avportal.fragment.DocumentsFragment"
         android:label="@string/menu_resources"
         tools:layout="@layout/webview" />
-<!--    <fragment-->
-<!--        android:id="@+id/nav_gallery"-->
-<!--        android:name="com.stevecao.avportal.fragment.GalleryFragment"-->
-<!--        android:label="@string/menu_gallery"-->
-<!--        tools:layout="@layout/webview" />-->
 </navigation>

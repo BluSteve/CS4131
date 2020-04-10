@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,9 +28,6 @@ import com.squareup.seismic.ShakeDetector;
 import com.stevecao.avportal.model.StageAction;
 import com.stevecao.avportal.model.StageActionHandler;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,6 +45,7 @@ public class StageModeActivity extends AppCompatActivity {
     float dX, dY;
     SensorManager sm;
     ShakeDetector sd;
+    int current = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +74,8 @@ public class StageModeActivity extends AppCompatActivity {
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
+        notifsTV.setTypeface(getResources().getFont(R.font.pt_mono));
+        notifsTV.setMovementMethod(new ScrollingMovementMethod());
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             add.setVisibility(View.GONE);
             edit.setVisibility(View.GONE);
@@ -87,22 +88,20 @@ public class StageModeActivity extends AppCompatActivity {
             t1 = new TextToSpeech(this, status -> {
                 if (status != TextToSpeech.ERROR) {
                     t1.setLanguage(Locale.UK);
-
                     FirebaseFirestore.getInstance().collection("stageactions")
                             .document("cue").addSnapshotListener((snapshot, e) -> {
                         if (e != null) {
                             Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("sizes", btns.size() + " " + hashMap.size());
-                            notifsTV.append("\n" + snapshot.get("notif").toString());
+                            notifsTV.append("\n\n" + snapshot.get("notif").toString());
                             shakeItBaby();
-                            t1.speak(snapshot.get("tts").toString(), TextToSpeech.QUEUE_FLUSH, null);
+                            if (snapshot.get("tts") != null)
+                                t1.speak(snapshot.get("tts").toString(), TextToSpeech.QUEUE_FLUSH, null);
                         }
                     });
                 }
             });
-
-
             StageActionHandler.updateActionsFromCache(this);
             for (StageAction action : StageActionHandler.getStageActions()) {
                 Log.d("actions", action.toString());
@@ -123,7 +122,8 @@ public class StageModeActivity extends AppCompatActivity {
                 });
                 b.setX(action.getX());
                 b.setY(action.getY());
-                b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 300));
+                b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 400));
+                b.setMinWidth(400);
                 hashMap.put(b, action);
                 btns.add(b);
                 housing.addView(b);
@@ -131,7 +131,9 @@ public class StageModeActivity extends AppCompatActivity {
 
             macro.setOnClickListener((s) -> {
                 if (!isMacroing) {
+                    current = macro.getCurrentTextColor();
                     macro.setBackgroundColor(getColor(R.color.colorSecondary));
+                    macro.setTextColor(getColor(R.color.black));
                     isMacroing = true;
                     Log.d("btn", btns.toString());
                     for (Button btn : btns) {
@@ -147,7 +149,10 @@ public class StageModeActivity extends AppCompatActivity {
                                     btn.performClick();
                                 });
                                 sd.start(sm);
-                                macro.setBackgroundColor(getColor(R.color.colorPrimary));
+                                macro.setBackgroundColor(getColor(R.color.colorPrimaryLight));
+                                macro.setTextColor(getColor(R.color.lesswhite));
+                                btn.setBackgroundColor(getColor(R.color.colorSecondary));
+                                btn.setTextColor(getColor(R.color.black));
                                 macro.setEnabled(false);
                                 Log.d("sensi", prefs.getInt("com.stevecao.avportal.shakeIntensity",
                                         ShakeDetector.SENSITIVITY_MEDIUM) + "");
@@ -160,12 +165,14 @@ public class StageModeActivity extends AppCompatActivity {
                 } else {
                     isMacroing = false;
                     macro.setBackgroundColor(getColor(R.color.colorPrimary));
+                    macro.setTextColor(current);
                 }
             });
             add.setOnClickListener((s) -> {
                 Log.d("stage", "here");
                 Button b = new Button(this);
-                b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 300));
+                b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 400));
+                b.setMinWidth(400);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.newStageAction));
                 final View customLayout = LayoutInflater.from(this).inflate(R.layout.stage_input, null);
@@ -178,7 +185,7 @@ public class StageModeActivity extends AppCompatActivity {
                     String eTitle = eTitleTV.getText().toString();
                     String eNotif = eNotifTV.getText().toString();
                     String eTts = eTtsTV.getText().toString();
-                    if (eTitle.equals("") || eNotif.equals("") || eTts.equals("")) {
+                    if (eTitle.equals("") || eNotif.equals("")) {
                         Toast.makeText(this, "Please enter valid values!", Toast.LENGTH_SHORT).show();
                     } else {
                         String buttonId = (new Date()).getTime() + (new Random()).nextInt(1000) + "";
@@ -186,6 +193,7 @@ public class StageModeActivity extends AppCompatActivity {
                         hashMap.put(b, sa);
                         StageActionHandler.addAction(sa);
                         b.setText(eTitle);
+                        b.setOnClickListener(new MyClickListener());
                         btns.add(b);
                         housing.addView(b);
                     }
@@ -203,15 +211,11 @@ public class StageModeActivity extends AppCompatActivity {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
                                 switch (event.getAction()) {
-
                                     case MotionEvent.ACTION_DOWN:
-
                                         dX = view.getX() - event.getRawX();
                                         dY = view.getY() - event.getRawY();
                                         break;
-
                                     case MotionEvent.ACTION_MOVE:
-
                                         view.animate()
                                                 .x(event.getRawX() + dX)
                                                 .y(event.getRawY() + dY)
@@ -238,9 +242,8 @@ public class StageModeActivity extends AppCompatActivity {
                 }
             });
             delete.setOnClickListener((s) -> {
-
                 if (!isDeleting) {
-                    delete.setBackgroundColor(getColor(R.color.colorSecondary));
+                    delete.setBackgroundColor(getColor(R.color.red));
                     isDeleting = true;
                     Log.d("btn", btns.toString());
                     for (Button btn : btns) {
@@ -292,6 +295,12 @@ public class StageModeActivity extends AppCompatActivity {
         super.onPause();
         if (sd != null)
             sd.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        t1.shutdown();
     }
 
     class MyClickListener implements View.OnClickListener {

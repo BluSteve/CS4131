@@ -48,12 +48,13 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
     private ViewGroup container;
     private ArrayList<Integer> faders = new ArrayList<>(0);
     private ArrayList<Integer> currents = new ArrayList<>(0);
-    private TextView cuesTV;
+    private TextView cuesTV, indicator;
     private LightingCue lc;
 
-    public LightsAdapter(Context mContext, TextView cues) {
+    public LightsAdapter(Context mContext, TextView cues, TextView indicator) {
         this.mContext = mContext;
         this.cuesTV = cues;
+        this.indicator = indicator;
         SharedPreferences prefs = mContext.getSharedPreferences("com.stevecao.avportal", Context.MODE_PRIVATE);
         int size = prefs.getInt("com.stevecao.avportal.faderCount", 5);
         for (int x = 1; x < (size + 1); x++) faders.add(x);
@@ -88,6 +89,7 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 currents.set(position, progress);
+                indicator.setText(progress + "");
                 Log.d("currents", currents.toString());
             }
 
@@ -106,16 +108,23 @@ public class LightsAdapter extends RecyclerView.Adapter<LightsAdapter.MyViewHold
 
                         Log.d("currents", "stopped " + lc.getTimeTaken() + " " + temp);
                         if (Math.abs(temp - lc.getTimeTaken()) < errorMargin) {
-                            Toast.makeText(mContext, "Correct!", Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(mContext, "Correct!", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast.show();
                         } else if (temp - lc.getTimeTaken() > errorMargin) {
-                            Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too slow! ", Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too slow! ", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast.show();
                         } else if (temp - lc.getTimeTaken() < -errorMargin) {
-                            Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too fast! ", Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(mContext, Math.abs(temp - lc.getTimeTaken()) + "ms too fast! ", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 100);
+                            toast.show();
                         }
                     } else {
-                        Toast.makeText(mContext, "Incorrect!", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(mContext, "Incorrect!", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                        toast.show();
                     }
-
                     lc = new LightingCue(faders, currents);
                     cuesTV.append(lc.formattedLightingCue() + "\n");
                 }

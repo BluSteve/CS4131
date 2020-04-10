@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.SpannableString;
@@ -23,23 +22,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.stevecao.avportal.R;
 import com.stevecao.avportal.model.Announcement;
-import com.stevecao.avportal.model.Equipment;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.SimpleTimeZone;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.MyViewHolder> {
     private Context mContext;
@@ -61,12 +56,12 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     public void deleteItem(int position) {
         Announcement toDelete = anns.get(position);
         anns.remove(position);
+        notifyItemRemoved(position);
         FirebaseFirestore.getInstance().collection("announcements")
                 .document(toDelete.getId())
                 .delete()
                 .addOnSuccessListener((task) -> {
                     Toast.makeText(mContext, "Item deleted", Toast.LENGTH_SHORT).show();
-                    notifyItemRemoved(position);
                 });
     }
     @Override

@@ -257,7 +257,6 @@ public class AnnouncementsFragment extends Fragment {
 
                                     @Override
                                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                         builder.setTitle(mContext.getString(R.string.deleteConfirm));
                                         builder.setPositiveButton(mContext.getString(R.string.yes), (dialog, which) -> {
@@ -287,7 +286,7 @@ public class AnnouncementsFragment extends Fragment {
                                             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
                                             background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-                                                    itemView.getTop() + 12, itemView.getRight(), itemView.getBottom() - 12);
+                                                    itemView.getTop() + 24, itemView.getRight(), itemView.getBottom() - 24);
                                         } else { // view is unSwiped
                                             background.setBounds(0, 0, 0, 0);
                                         }
